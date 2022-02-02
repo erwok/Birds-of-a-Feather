@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -30,13 +33,32 @@ public class NameActivity extends AppCompatActivity {
     private BeginSignInRequest signUpRequest;
 
     private EditText editTextName;
+    private Button confirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
 
+
         editTextName = findViewById(R.id.editTextName);
+        confirmButton = findViewById(R.id.confirmButton);
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                confirmButton.setEnabled(charSequence.length() > 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
@@ -84,6 +106,7 @@ public class NameActivity extends AppCompatActivity {
                         // Got an ID token from Google. Use it to authenticate
                         // with your backend.
                         editTextName.setText(credential.getDisplayName());
+                        confirmButton.setEnabled(true);
                         Log.d(TAG, "Got ID token.");
                     }
                 } catch (ApiException e) {
