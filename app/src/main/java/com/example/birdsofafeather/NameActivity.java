@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
@@ -58,7 +60,10 @@ public class NameActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
             }
+
+
         });
+
 
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
@@ -71,6 +76,16 @@ public class NameActivity extends AppCompatActivity {
                         .build())
                 .build();
 
+    }
+
+    public void saveName(View view) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        TextView nameView = findViewById(R.id.editTextName);
+        editor.putString("name", nameView.getText().toString());
+
+        editor.apply();
     }
 
     @Override
