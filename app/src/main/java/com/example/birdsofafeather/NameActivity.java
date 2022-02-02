@@ -65,7 +65,7 @@ public class NameActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // No Google Accounts found. Just continue presenting the signed-out UI.
-                        Log.d(TAG, e.getLocalizedMessage());
+                        Log.d(TAG, "No Google Accounts found. Just continue presenting the signed-out UI." + e.getLocalizedMessage());
                     }
                 });
     }
