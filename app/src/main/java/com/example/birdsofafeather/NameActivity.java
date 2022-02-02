@@ -120,7 +120,7 @@ public class NameActivity extends AppCompatActivity {
                     if (idToken !=  null) {
                         // Got an ID token from Google. Use it to authenticate
                         // with your backend.
-                        editTextName.setText(credential.getDisplayName());
+                        editTextName.setText(credential.getGivenName());
                         confirmButton.setEnabled(true);
                         Log.d(TAG, "Got ID token.");
                     }
