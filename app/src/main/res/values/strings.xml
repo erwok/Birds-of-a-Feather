@@ -4,4 +4,15 @@
     <string name="name_hint">Name</string>
     <string name="name_prompt">Please confirm or edit your display name:</string>
     <string name="web_client_ID">541625132620-45snujia8hrevihbq1lbi1p9g7udupa5.apps.googleusercontent.com</string>
+    <string name="enter_class_info_label">Enter Class Info</string>
+    <string name="year_label">Year :</string>
+    <string name="quarter_label">Quarter :</string>
+    <string name="subject_label">Subject :</string>
+    <string name="course_num_label">Course# :</string>
+    <string name="year_example">E.g. 2021</string>
+    <string name="quarter_example">E.g. Fall</string>
+    <string name="subject_example">E.g. CSE</string>
+    <string name="course_example">E.g. 110</string>
+
+
 </resources>
