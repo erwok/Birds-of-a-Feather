@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
@@ -27,10 +29,14 @@ public class NameActivity extends AppCompatActivity {
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
 
+    private EditText editTextName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
+
+        editTextName = findViewById(R.id.editTextName);
 
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
@@ -48,25 +54,20 @@ public class NameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         oneTapClient.beginSignIn(signUpRequest)
-                .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
-                    @Override
-                    public void onSuccess(BeginSignInResult result) {
-                        try {
-                            startIntentSenderForResult(
-                                    result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
-                                    null, 0, 0, 0);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
-                        }
+                .addOnSuccessListener(this, result -> {
+                    try {
+                        startIntentSenderForResult(
+                                result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                null, 0, 0, 0);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
                     }
                 })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // No Google Accounts found. Just continue presenting the signed-out UI.
-                        Log.d(TAG, "No Google Accounts found. Just continue presenting the signed-out UI." + e.getLocalizedMessage());
-                    }
+                .addOnFailureListener(this, e -> {
+                    // No Google Accounts found. Just continue presenting the signed-out UI.
+                    Log.d(TAG, "No Google Accounts found. Just continue presenting the signed-out UI." + e.getLocalizedMessage());
                 });
     }
 
@@ -82,6 +83,7 @@ public class NameActivity extends AppCompatActivity {
                     if (idToken !=  null) {
                         // Got an ID token from Google. Use it to authenticate
                         // with your backend.
+                        editTextName.setText(credential.getDisplayName());
                         Log.d(TAG, "Got ID token.");
                     }
                 } catch (ApiException e) {
