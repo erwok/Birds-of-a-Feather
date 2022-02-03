@@ -23,6 +23,9 @@ public class StudentWithCourses implements IStudent {
     public int getId() { return this.student.studentId; }
 
     @Override
+    public String getName() { return this.student.name; }
+
+    @Override
     public String getPhotoURL() { return this.student.photoURL; }
 
     @Override
