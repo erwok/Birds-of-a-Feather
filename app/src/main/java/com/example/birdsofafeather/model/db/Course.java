@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "courses")
 public class Course {
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "course_id")
     public int courseId;
 
     @ColumnInfo(name = "student_id")
@@ -28,7 +28,8 @@ public class Course {
     @ColumnInfo(name = "course_title")
     public String courseTitle;
 
-    public Course(int year, String quarter, String subject, int courseNum) {
+    public Course(int courseId, int year, String quarter, String subject, int courseNum) {
+        this.courseId = courseId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;

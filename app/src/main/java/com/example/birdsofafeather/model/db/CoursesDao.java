@@ -17,8 +17,8 @@ public interface CoursesDao {
     @Query("SELECT * FROM courses")
     List<Course> getCourses();
 
-    @Query("SELECT * FROM courses WHERE id=:id")
-    Course get(int id);
+    @Query("SELECT * FROM courses WHERE course_id=:courseId")
+    Course get(int courseId);
 
     @Query("SELECT COUNT(*) FROM courses")
     int count();

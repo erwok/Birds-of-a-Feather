@@ -15,7 +15,6 @@ import java.util.List;
 
 public class AddCourseActivity extends AppCompatActivity {
     private AppDatabase db;
-    private IStudent student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +22,33 @@ public class AddCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_course);
 
         Intent intent = getIntent();
-        int studentId = intent.getIntExtra("student_id", 0);
+        //int studentId = intent.getIntExtra("student_id", 0);
 
         db = AppDatabase.singleton(this);
-        List<Course> courses = db.coursesDao().getCourses();
     }
 
     public void onAddButtonClicked(View view) {
-        //CourseUtilities.showAlert(this, "Got here");
-        int newNoteId = db.coursesDao().count() + 1;
+        addCourse();
+    }
 
+    public void onDoneButtonClicked(View view) {
+        TextView yearTextView = findViewById(R.id.editYearTextView);
+        TextView quarterTextView = findViewById(R.id.editQuarterTextView);
+        TextView subjectTextView = findViewById(R.id.editSubjectTextView);
+        TextView courseNumTextView = findViewById(R.id.editCourseNumTextView);
+
+        if(!(yearTextView.getText().toString().equals("")
+                && quarterTextView.getText().toString().equals("")
+                && subjectTextView.getText().toString().equals("")
+                && courseNumTextView.getText().toString().equals("")
+        )) {
+            addCourse();
+        }
+
+        finish();
+    }
+
+    private void addCourse() {
         TextView yearTextView = findViewById(R.id.editYearTextView);
         TextView quarterTextView = findViewById(R.id.editQuarterTextView);
         TextView subjectTextView = findViewById(R.id.editSubjectTextView);
@@ -44,17 +60,16 @@ public class AddCourseActivity extends AppCompatActivity {
             String subject = subjectTextView.getText().toString();
             int courseNum = Integer.parseInt(courseNumTextView.getText().toString());
 
-            Course newCourse = new Course(year, quarter, subject, courseNum);
+            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, year,
+                    quarter, subject, courseNum);
+
             db.coursesDao().insert(newCourse);
 
             CourseUtilities.showAlert(this, "Course added!");
 
         } catch (Exception ex) {
-            CourseUtilities.showError(this, "Something was incorrectly formatted!");
+            CourseUtilities.showError(this, "Something was incorrectly formatted!"
+                    + "\n" + ex.toString());
         }
-    }
-
-    public void onDoneButtonClicked(View view) {
-        finish();
     }
 }
