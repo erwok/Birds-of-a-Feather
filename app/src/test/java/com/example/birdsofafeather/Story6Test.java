@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,11 @@ public class Story6Test {
         scenario = ActivityScenario.launch(AddCourseActivity.class);
         db = AppDatabase.singleton(getApplicationContext());
         db.clearAllTables();
+    }
+
+    @After
+    public void tearDown() {
+        db = AppDatabase.reset();
     }
 
     @Test
