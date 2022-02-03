@@ -26,7 +26,7 @@ public class Story6Test {
     public void init() {
         scenario = ActivityScenario.launch(AddCourseActivity.class);
         db = AppDatabase.singleton(getApplicationContext());
-        //db.clearAllTables();
+        db.clearAllTables();
     }
 
     @Test
