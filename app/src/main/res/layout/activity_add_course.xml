@@ -100,18 +100,6 @@
         app:layout_constraintTop_toBottomOf="@+id/enter_class_info_label" />
 
     <EditText
-        android:id="@+id/editQuarterTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="@string/quarter_example"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editYearTextView" />
-
-    <EditText
         android:id="@+id/editSubjectTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -134,4 +122,15 @@
         android:text="@string/course_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSubjectTextView" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editQuarterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:ems="10"
+        android:minHeight="48dp"
+        android:text="@string/quarter_example"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editYearTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

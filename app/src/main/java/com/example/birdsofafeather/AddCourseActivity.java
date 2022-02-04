@@ -5,21 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AddCourseActivity extends AppCompatActivity {
     private AppDatabase db;
+    private static final String[] QUARTERS = new String[] {
+            "Fall", "Winter", "Spring", "Summer Session I", "Summer Session II",
+            "Special Summer Session"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, QUARTERS);
+        AutoCompleteTextView textView = (AutoCompleteTextView)
+                findViewById(R.id.editQuarterTextView);
+        textView.setAdapter(adapter);
 
         Intent intent = getIntent();
         //int studentId = intent.getIntExtra("student_id", 0);
@@ -59,6 +72,10 @@ public class AddCourseActivity extends AppCompatActivity {
             String quarter = quarterTextView.getText().toString();
             String subject = subjectTextView.getText().toString();
             int courseNum = Integer.parseInt(courseNumTextView.getText().toString());
+
+            if(!Arrays.asList(QUARTERS).contains(quarter)) {
+                throw new Exception();
+            }
 
             Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, year,
                     quarter, subject, courseNum);
