@@ -13,6 +13,7 @@
     <string name="quarter_example">E.g. Fall</string>
     <string name="subject_example">E.g. CSE</string>
     <string name="course_example">E.g. 110</string>
+    <string name="matched_bof_label">Matched BoF</string>
 
 
 </resources>
