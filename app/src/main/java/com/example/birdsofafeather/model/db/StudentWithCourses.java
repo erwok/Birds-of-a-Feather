@@ -40,6 +40,16 @@ public class StudentWithCourses implements IStudent {
 
     }
 
+    public List<String> overlappingClasses(StudentWithCourses other) {
+        List<String> myList = new ArrayList<>();
+        for(int i = 0; i < courses.size(); i++) {
+            if(other.getClasses().contains(courses.get(i))) {
+                myList.add(courses.get(i));
+            }
+        }
+        return myList;
+    }
+
     /**
      * Constructs a StudentWithCourses from a byte[]
      * @param studentID The ID to give the newly-made student
