@@ -17,10 +17,12 @@ import java.util.List;
 
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
     private final List<? extends IStudent> students;
+    private final List<Integer> commCourses;
 
-    public StudentsViewAdapter(List<? extends IStudent> students) {
+    public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commCourses) {
         super();
         this.students = students;
+        this.commCourses = commCourses;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull StudentsViewAdapter.ViewHolder holder, int position) {
-        holder.setPerson(students.get(position));
+        holder.setPerson(students.get(position), commCourses.get(position));
     }
 
     @Override
@@ -49,6 +51,8 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final TextView matchedCoursesView;
         private IStudent student;
 
+        private final String MATCHED_COURSES = "Matched Courses: ";
+
         ViewHolder(View itemView) {
             super(itemView);
             this.studNameView = itemView.findViewById(R.id.stud_name_textview);
@@ -57,10 +61,11 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             itemView.setOnClickListener(this);
         }
 
-        public void setPerson(IStudent student) {
+        public void setPerson(IStudent student, int commCourses) {
             this.student = student;
             this.studNameView.setText(student.getName());
-            // pfp and matchd courses not implemnted yet
+            this.matchedCoursesView.setText(MATCHED_COURSES + commCourses);
+            // pfp not implemented yet
         }
 
         @Override
