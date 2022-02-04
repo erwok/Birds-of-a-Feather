@@ -30,7 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class NameActivity extends AppCompatActivity {
 
     private static final int REQ_ONE_TAP = 2;
-    private static final String NAME_PREFERENCE_KEY = "name";
+    public static final String NAME_PREFERENCE_KEY = "name";
 
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
