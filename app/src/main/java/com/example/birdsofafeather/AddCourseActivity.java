@@ -58,7 +58,7 @@ public class AddCourseActivity extends AppCompatActivity {
             int year = Integer.parseInt(yearTextView.getText().toString());
             String quarter = quarterTextView.getText().toString();
             String subject = subjectTextView.getText().toString();
-            int courseNum = Integer.parseInt(courseNumTextView.getText().toString());
+            String courseNum = courseNumTextView.getText().toString();
 
             Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, year,
                     quarter, subject, courseNum);

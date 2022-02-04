@@ -5,6 +5,9 @@ import androidx.room.Relation;
 
 import com.example.birdsofafeather.model.IStudent;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,4 +33,21 @@ public class StudentWithCourses implements IStudent {
 
     @Override
     public List<String> getClasses() { return this.courses; }
+
+    public byte[] toByteArray() {
+        byte[] nameBytes = student.name.getBytes(StandardCharsets.US_ASCII);
+        byte[] photoBytes = student.photoURL.getBytes(StandardCharsets.US_ASCII);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write(nameBytes, 0, nameBytes.length);
+        outputStream.write(0);
+        outputStream.write(photoBytes, 0, photoBytes.length);
+        outputStream.write(0);
+        for (String course : this.courses) {
+            byte[] course_bytes = course.getBytes(StandardCharsets.US_ASCII);
+            outputStream.write(course_bytes, 0, course_bytes.length);
+            outputStream.write(0);
+        }
+        return outputStream.toByteArray();
+    }
 }
