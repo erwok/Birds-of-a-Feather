@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class NameActivity extends AppCompatActivity {
 
     private static final int REQ_ONE_TAP = 2;
+    private static final String NAME_PREFERENCE_KEY = "name";
 
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
@@ -83,29 +84,37 @@ public class NameActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         TextView nameView = findViewById(R.id.editTextName);
-        editor.putString("name", nameView.getText().toString());
+        editor.putString(NAME_PREFERENCE_KEY, nameView.getText().toString());
 
         editor.apply();
+
+        Intent intent = new Intent(this, AddCourseActivity.class);
+        startActivity(intent);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        oneTapClient.beginSignIn(signUpRequest)
-                .addOnSuccessListener(this, result -> {
-                    try {
-                        startIntentSenderForResult(
-                                result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
-                                null, 0, 0, 0);
-                    } catch (IntentSender.SendIntentException e) {
-                        Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
-                    }
-                })
-                .addOnFailureListener(this, e -> {
-                    // No Google Accounts found. Just continue presenting the signed-out UI.
-                    Log.d(TAG, "No Google Accounts found. Just continue presenting the signed-out UI." + e.getLocalizedMessage());
-                });
+        if (getPreferences(MODE_PRIVATE).getString(NAME_PREFERENCE_KEY, "").isEmpty()) {
+            oneTapClient.beginSignIn(signUpRequest)
+                    .addOnSuccessListener(this, result -> {
+                        try {
+                            startIntentSenderForResult(
+                                    result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                    null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            Log.e(TAG, "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                        }
+                    })
+                    .addOnFailureListener(this, e -> {
+                        // No Google Accounts found. Just continue presenting the signed-out UI.
+                        Log.d(TAG, "No Google Accounts found. Just continue presenting the signed-out UI." + e.getLocalizedMessage());
+                    });
+        } else {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
