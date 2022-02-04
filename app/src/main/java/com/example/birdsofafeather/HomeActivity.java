@@ -43,8 +43,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
 
-        //Fake receiving a message every 3 seconds
-        this.messageListener = new FakedMessageListener(listener, 3, "Hello");
         myMessage = new Message("Hello World".getBytes());
     }
 
