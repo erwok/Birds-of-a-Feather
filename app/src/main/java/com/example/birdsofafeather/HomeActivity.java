@@ -8,27 +8,34 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.birdsofafeather.model.DummyStudent;
-import com.example.birdsofafeather.model.FakedMessageListener;
-import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "Nearby-Devices";
     private MessageListener messageListener;
     private Message myMessage;
-    protected IStudent student = new DummyStudent(0, "Daniel", "",
-            new String[] {});
+    protected StudentWithCourses meWithCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // For testing
+        meWithCourses = new StudentWithCourses();
+        meWithCourses.student.name = getPreferences(MODE_PRIVATE).getString("name", "TEST_NAME");
+        meWithCourses.student.studentId = 0;
+        meWithCourses.student.photoURL = "";
+        meWithCourses.courses = new ArrayList<>();
+        meWithCourses.courses.add(new Course(0, 2022, "Winter", "CSE", "110").courseTitle);
+
 
         AppDatabase db = AppDatabase.singleton(getApplicationContext());
 
@@ -43,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
 
-        myMessage = new Message("Hello World".getBytes());
+        myMessage = new Message(meWithCourses.toByteArray());
     }
 
     @Override

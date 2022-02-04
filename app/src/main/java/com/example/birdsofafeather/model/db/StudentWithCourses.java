@@ -40,6 +40,11 @@ public class StudentWithCourses implements IStudent {
 
     }
 
+    /**
+     * Constructs a StudentWithCourses from a byte[]
+     * @param studentID The ID to give the newly-made student
+     * @param bytes A byte array, with the format specified in toByteArray
+     */
     public StudentWithCourses(int studentID, byte[] bytes) {
         student = new Student();
         student.studentId = studentID;
@@ -67,6 +72,17 @@ public class StudentWithCourses implements IStudent {
         }
     }
 
+    /**
+     * Encodes this StudentWithCourses's info to binary. The format is:
+     * 1 byte for nameLength
+     * nameLength bytes for student.name, encoded in ASCII
+     * 2 bytes for photoBytesLength (MSB first)
+     * photoBytesLength bytes for student.photoURL, encoded in ASCII
+     *
+     * and then any number of courses, where a course is:
+     * 1 byte for courseLength
+     * courseLength bytes for the course title, encoded in ASCII
+     */
     public byte[] toByteArray() {
         byte[] nameBytes = student.name.getBytes(StandardCharsets.US_ASCII);
         byte[] photoBytes = student.photoURL.getBytes(StandardCharsets.US_ASCII);
@@ -74,8 +90,11 @@ public class StudentWithCourses implements IStudent {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(nameBytes.length);
         outputStream.write(nameBytes, 0, nameBytes.length);
+
+        // manual implementation of 16-bit int in java lol
         outputStream.write((photoBytes.length & 0xFF00) >> 8);
         outputStream.write(photoBytes.length & 0xFF);
+
         outputStream.write(photoBytes, 0, photoBytes.length);
         for (String course : this.courses) {
             byte[] course_bytes = course.getBytes(StandardCharsets.US_ASCII);
