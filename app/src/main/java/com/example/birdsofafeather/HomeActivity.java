@@ -1,5 +1,6 @@
 package com.example.birdsofafeather;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,10 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.birdsofafeather.model.DummyStudent;
 import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,9 +30,12 @@ import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 public class HomeActivity extends AppCompatActivity {
+    private static final String TAG = "BoaF";
+    private Message msg;
     protected RecyclerView matchedStudentsView;
     protected RecyclerView.LayoutManager studentsLayoutManager;
     protected StudentsViewAdapter studentsViewAdapter;
+    private MessageListener messageListener;
 
     protected IStudent user = new DummyStudent(0, "Daniel", "",
             new String[] {
@@ -50,9 +58,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Button stop = findViewById(R.id.stop_btn);
+        //stop.setVisibility(View.GONE);
+
         AppDatabase db = AppDatabase.singleton(getApplicationContext());
         //List<? extends IStudent> students = db.studentWithCoursesDao().getAll();
         List<IStudent> students = Arrays.asList(data);
+        this.msg = new Message("Daniel".getBytes());
 
         matchedStudentsView = findViewById(R.id.matched_students_view);
 
@@ -114,5 +126,42 @@ public class HomeActivity extends AppCompatActivity {
                 return 0;
             }
         }
+    }
+
+    public void onStartClicked(View view) {
+        Button start = findViewById(R.id.start_btn);
+        start.setVisibility(View.GONE);
+
+        Button stop = findViewById(R.id.stop_btn);
+        stop.setVisibility(View.VISIBLE);
+
+        MessageListener realListener = new MessageListener() {
+            //put information into database
+            @Override
+            public void onFound(@NonNull Message message) {
+                Log.d(TAG, "Found message: " + new String(message.getContent()));
+            }
+
+            @Override
+            public void onLost(@NonNull Message message) {
+                Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+            }
+        };
+
+        //eventually not faked
+        this.messageListener = new FakedMessageListener(realListener, 3, "Hello world!");
+        Nearby.getMessagesClient(this).subscribe(messageListener);
+        Nearby.getMessagesClient(this).publish(msg);
+    }
+
+    public void onStopClicked(View view) {
+        Button start = findViewById(R.id.start_btn);
+        start.setVisibility(View.VISIBLE);
+
+        Button stop = findViewById(R.id.stop_btn);
+        stop.setVisibility(View.GONE);
+
+        Nearby.getMessagesClient(this).unsubscribe(messageListener);
+        Nearby.getMessagesClient(this).unpublish(this.msg);
     }
 }
