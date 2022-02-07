@@ -88,7 +88,7 @@ public class NameActivity extends AppCompatActivity {
 
         editor.apply();
 
-        Intent intent = new Intent(this, AddCourseActivity.class);
+        Intent intent = new Intent(this, headshot.class);
         startActivity(intent);
     }
 
