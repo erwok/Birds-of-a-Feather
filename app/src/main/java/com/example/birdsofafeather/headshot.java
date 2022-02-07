@@ -1,5 +1,7 @@
 package com.example.birdsofafeather;
 
+import static com.example.birdsofafeather.CourseUtilities.showError;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -34,6 +36,9 @@ public class headshot extends AppCompatActivity {
 
             Intent intent = new Intent(this, AddCourseActivity.class);
             startActivity(intent);
+        }
+        else {
+            showError(this, "URL must be a .png or .jpg");
         }
 
 
