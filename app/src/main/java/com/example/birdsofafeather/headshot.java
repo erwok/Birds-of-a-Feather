@@ -26,13 +26,19 @@ public class headshot extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         TextView urlBox = findViewById(R.id.URLBox);
-        editor.putString(URL_PREFERENCE_KEY, urlBox.getText().toString());
 
-        editor.apply();
+        if (urlBox.getText().toString().endsWith(".png") || urlBox.getText().toString().endsWith(".jpg")) {
+            editor.putString(URL_PREFERENCE_KEY, urlBox.getText().toString());
 
-        Intent intent = new Intent(this, AddCourseActivity.class);
-        startActivity(intent);
+            editor.apply();
+
+            Intent intent = new Intent(this, AddCourseActivity.class);
+            startActivity(intent);
+        }
+
 
 
     }
+
+
 }
