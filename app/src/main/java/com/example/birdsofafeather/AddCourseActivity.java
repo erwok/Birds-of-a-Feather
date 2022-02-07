@@ -77,8 +77,8 @@ public class AddCourseActivity extends AppCompatActivity {
                 throw new Exception();
             }
 
-            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, year,
-                    quarter, subject, courseNum);
+            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1,
+                    0, year, quarter, subject, courseNum);
 
             db.coursesDao().insert(newCourse);
 

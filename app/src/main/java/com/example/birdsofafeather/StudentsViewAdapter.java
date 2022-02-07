@@ -50,6 +50,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final ImageView studPfpView;
         private final TextView matchedCoursesView;
         private IStudent student;
+        private int commonCourses;
 
         private final String MATCHED_COURSES = "Matched Courses: ";
 
@@ -64,7 +65,8 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         public void setPerson(IStudent student, int commCourses) {
             this.student = student;
             this.studNameView.setText(student.getName());
-            this.matchedCoursesView.setText(MATCHED_COURSES + commCourses);
+            this.commonCourses = commCourses;
+            this.matchedCoursesView.setText(MATCHED_COURSES + commonCourses);
             // pfp not implemented yet
         }
 
@@ -73,6 +75,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             Context context = view.getContext();
             Intent intent = new Intent(context, StudentDetailActivity.class);
             intent.putExtra("student_id", this.student.getId());
+            intent.putExtra("comm_courses", commonCourses);
             context.startActivity(intent);
         }
     }

@@ -28,8 +28,9 @@ public class Course {
     @ColumnInfo(name = "course_title")
     public String courseTitle;
 
-    public Course(int courseId, int year, String quarter, String subject, int courseNum) {
+    public Course(int courseId, int studentId, int year, String quarter, String subject, int courseNum) {
         this.courseId = courseId;
+        this.studentId = studentId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;
