@@ -11,9 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="74dp"
-        android:layout_marginBottom="638dp"
-        android:text="Please upload your profile picture in URL format in the box below. "
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Please upload your profile picture in\nURL format in the box below. "
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,11 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
-        android:layout_marginBottom="508dp"
         android:ems="10"
+        android:hint="URL"
         android:inputType="textPersonName"
-        android:text="URL"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headshotPrompt" />
@@ -36,20 +33,19 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:text="Submit"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="515dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/urlFormatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="155dp"
-        android:layout_marginBottom="262dp"
+        android:layout_marginTop="32dp"
         android:text=".jpg or .png only"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/URLBox" />
