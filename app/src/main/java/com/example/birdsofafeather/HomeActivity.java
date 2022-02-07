@@ -84,6 +84,8 @@ public class HomeActivity extends AppCompatActivity {
                 1, 2021, "FA", "CSE", 100));
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
                 4, 2021, "FA", "CSE", 100));
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                4, 2021, "FA", "CSE", 110));
         // END OF TESTING
 
         List<? extends IStudent> students = db.studentWithCoursesDao().getAll();
