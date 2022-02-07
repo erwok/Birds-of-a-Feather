@@ -10,7 +10,7 @@
     <string name="subject_label">Subject :</string>
     <string name="course_num_label">Course# :</string>
     <string name="year_example">E.g. 2021</string>
-    <string name="quarter_example">E.g. Fall</string>
+    <string name="quarter_example">E.g. FA</string>
     <string name="subject_example">E.g. CSE</string>
     <string name="course_example">E.g. 110</string>
     <string name="matched_bof_label">Matched BoF</string>
