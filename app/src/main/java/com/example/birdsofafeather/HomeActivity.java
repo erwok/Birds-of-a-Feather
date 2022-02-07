@@ -1,16 +1,16 @@
 package com.example.birdsofafeather;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.DummyStudent;
 import com.example.birdsofafeather.model.IStudent;
@@ -21,13 +21,8 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.stream.Collectors;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF";

@@ -70,8 +70,10 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
 
         @Override
         public void onClick(View view) {
-            // does nothing for now, but eventually should pull up new activity with list
-            // of common courses
+            Context context = view.getContext();
+            Intent intent = new Intent(context, StudentDetailActivity.class);
+            intent.putExtra("student_id", this.student.getId());
+            context.startActivity(intent);
         }
     }
 }
