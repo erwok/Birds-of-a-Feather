@@ -99,7 +99,7 @@ public class Story6Test {
             courseNumTextView.setText("110");
             button.performClick();
 
-            assertEquals(1, db.coursesDao().count());
+            assertEquals(0, db.coursesDao().count());
         });
     }
 
@@ -169,7 +169,7 @@ public class Story6Test {
             courseNumTextView.setText("110");
             doneButton.performClick();
 
-            assertEquals(3, db.coursesDao().count());
+            assertEquals(2, db.coursesDao().count());
         });
     }
 }
