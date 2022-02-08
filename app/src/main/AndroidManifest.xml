@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.birdsofafeather">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
+        <activity
+            android:name=".StudentDetailActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCg4o1Mn7sLD8tG_k4WA9XWxsn5-2nwYn8" />
+
         <activity
             android:name=".StartSearchActivity"
             android:exported="false" />

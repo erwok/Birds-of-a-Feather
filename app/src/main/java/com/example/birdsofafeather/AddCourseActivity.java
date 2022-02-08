@@ -19,9 +19,9 @@ import java.util.List;
 public class AddCourseActivity extends AppCompatActivity {
     private AppDatabase db;
     private static final String[] QUARTERS = new String[] {
-            "Fall", "Winter", "Spring", "Summer Session I", "Summer Session II",
-            "Special Summer Session"
+            "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
+    private static final int USER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +34,6 @@ public class AddCourseActivity extends AppCompatActivity {
                 findViewById(R.id.editQuarterTextView);
         textView.setAdapter(adapter);
 
-        Intent intent = getIntent();
-        //int studentId = intent.getIntExtra("student_id", 0);
-
         db = AppDatabase.singleton(this);
     }
 
@@ -45,7 +42,7 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
     public void onDoneButtonClicked(View view) {
-        TextView yearTextView = findViewById(R.id.editYearTextView);
+        /*TextView yearTextView = findViewById(R.id.editYearTextView);
         TextView quarterTextView = findViewById(R.id.editQuarterTextView);
         TextView subjectTextView = findViewById(R.id.editSubjectTextView);
         TextView courseNumTextView = findViewById(R.id.editCourseNumTextView);
@@ -56,7 +53,7 @@ public class AddCourseActivity extends AppCompatActivity {
                 && courseNumTextView.getText().toString().equals("")
         )) {
             addCourse();
-        }
+        }*/
 
         finish();
     }
@@ -77,8 +74,8 @@ public class AddCourseActivity extends AppCompatActivity {
                 throw new Exception();
             }
 
-            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, year,
-                    quarter, subject, courseNum);
+            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1,
+                    USER_ID, year, quarter, subject, courseNum);
 
             db.coursesDao().insert(newCourse);
 

@@ -50,13 +50,13 @@ public class Story6Test {
             Button button = activity.findViewById(R.id.add_button);
 
             yearTextView.setText("2021");
-            quarterTextView.setText("Fall");
+            quarterTextView.setText("FA");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("110");
             button.performClick();
 
             yearTextView.setText("2020");
-            quarterTextView.setText("Spring");
+            quarterTextView.setText("SP");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("100");
             button.performClick();
@@ -75,7 +75,7 @@ public class Story6Test {
             Button button = activity.findViewById(R.id.add_button);
 
             yearTextView.setText("F");
-            quarterTextView.setText("Fall");
+            quarterTextView.setText("FA");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("110");
             button.performClick();
@@ -94,12 +94,12 @@ public class Story6Test {
             Button button = activity.findViewById(R.id.done_button);
 
             yearTextView.setText("2021");
-            quarterTextView.setText("Fall");
+            quarterTextView.setText("FA");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("110");
             button.performClick();
 
-            assertEquals(1, db.coursesDao().count());
+            assertEquals(0, db.coursesDao().count());
         });
     }
 
@@ -113,7 +113,7 @@ public class Story6Test {
             Button button = activity.findViewById(R.id.done_button);
 
             yearTextView.setText("F");
-            quarterTextView.setText("Fall");
+            quarterTextView.setText("FA");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("110");
             button.performClick();
@@ -152,13 +152,13 @@ public class Story6Test {
             Button doneButton = activity.findViewById(R.id.add_button);
 
             yearTextView.setText("2021");
-            quarterTextView.setText("Fall");
+            quarterTextView.setText("FA");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("110");
             addButton.performClick();
 
             yearTextView.setText("2020");
-            quarterTextView.setText("Spring");
+            quarterTextView.setText("SP");
             subjectTextView.setText("CSE");
             courseNumTextView.setText("100");
             addButton.performClick();
@@ -169,7 +169,7 @@ public class Story6Test {
             courseNumTextView.setText("110");
             doneButton.performClick();
 
-            assertEquals(3, db.coursesDao().count());
+            assertEquals(2, db.coursesDao().count());
         });
     }
 }
