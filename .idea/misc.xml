@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/activity_start_search.xml" value="0.45" />
         <entry key="app/src/main/res/layout/activity_stop_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_student_detail.xml" value="0.17753623188405798" />
+        <entry key="app/src/main/res/layout/course_row.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/student_row.xml" value="0.24292144775390628" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.152" />
       </map>

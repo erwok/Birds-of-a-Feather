@@ -58,7 +58,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             super(itemView);
             this.studNameView = itemView.findViewById(R.id.stud_name_textview);
             this.studPfpView = itemView.findViewById(R.id.stud_pfp_imageview);
-            this.matchedCoursesView = itemView.findViewById(R.id.matched_courses_textview);
+            this.matchedCoursesView = itemView.findViewById(R.id.course_name_textview);
             itemView.setOnClickListener(this);
         }
 

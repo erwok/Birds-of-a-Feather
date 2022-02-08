@@ -81,11 +81,24 @@ public class HomeActivity extends AppCompatActivity {
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
                 USER_ID, 2021, "FA", "CSE", 100));
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                USER_ID, 2021, "FA", "CSE", 110));
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                USER_ID, 2020, "SP", "CSE", 101));
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                USER_ID, 2020, "SP", "PHIL", 27));
+
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
                 1, 2021, "FA", "CSE", 100));
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                1, 2021, "FA", "CSE", 110));
+
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
                 4, 2021, "FA", "CSE", 100));
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2021, "FA", "CSE", 110));
+                4, 2020, "SP", "CSE", 101));
+        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
+                4, 2020, "SP", "PHIL", 27));
+
         // END OF TESTING
 
         List<? extends IStudent> students = db.studentWithCoursesDao().getAll();
