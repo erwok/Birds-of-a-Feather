@@ -21,9 +21,6 @@
             android:value="AIzaSyCg4o1Mn7sLD8tG_k4WA9XWxsn5-2nwYn8" />
 
         <activity
-            android:name=".StartSearchActivity"
-            android:exported="false" />
-        <activity
             android:name=".AddCourseActivity"
             android:exported="false" />
         <activity
