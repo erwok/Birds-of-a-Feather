@@ -95,7 +95,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="@string/year_example"
+        android:hint="@string/year_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_class_info_label" />
 
@@ -107,7 +107,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="@string/subject_example"
+        android:hint="@string/subject_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editQuarterTextView" />
 
@@ -119,7 +119,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="@string/course_example"
+        android:hint="@string/course_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSubjectTextView" />
 
@@ -130,7 +130,7 @@
         android:layout_marginEnd="40dp"
         android:ems="10"
         android:minHeight="48dp"
-        android:text="@string/quarter_example"
+        android:hint="@string/quarter_example"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editYearTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
