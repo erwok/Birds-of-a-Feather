@@ -12,12 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.IStudent;
+import com.example.birdsofafeather.model.db.Student;
 
 import java.util.List;
 
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
-    private final List<? extends IStudent> students;
-    private final List<Integer> commCourses;
+    private List<? extends IStudent> students;
+    private List<Integer> commCourses;
 
     public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commCourses) {
         super();
@@ -43,6 +44,17 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     @Override
     public int getItemCount() {
         return this.students.size();
+    }
+
+    public void addStudent(List<IStudent> students, List<Integer> commCourses) {
+        this.students = students;
+        this.commCourses = commCourses;
+        for(int i = 0; i < students.size(); i++) {
+            System.out.println(students.get(i).getName());
+            System.out.println(students.size());
+            this.notifyItemChanged(i);
+        }
+        System.out.println("woobeedoobee");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

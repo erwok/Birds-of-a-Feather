@@ -35,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager studentsLayoutManager;
     protected StudentsViewAdapter studentsViewAdapter;
     private MessageListener messageListener;
+    private AppDatabase db;
+    private List<? extends IStudent> students;
 
     protected IStudent user = new DummyStudent(0, "Daniel", "",
             new String[] {
@@ -58,10 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //Button stop = findViewById(R.id.stop_btn);
-        //stop.setVisibility(View.GONE);
-
-        AppDatabase db = AppDatabase.singleton(getApplicationContext());
+        db = AppDatabase.singleton(getApplicationContext());
 
         //FOR TESTING STORY 8
         db.clearAllTables();
@@ -101,13 +100,17 @@ public class HomeActivity extends AppCompatActivity {
 
         // END OF TESTING
 
-        List<? extends IStudent> students = db.studentWithCoursesDao().getAll();
+        students = db.studentWithCoursesDao().getAll();
         user = students.remove(0);
-        this.msg = new Message("Daniel".getBytes());
+        String encode = this.user.getName();
+        for(int i = 0; i < this.user.getClasses().size(); i++)
+            encode += "\n" + this.user.getClasses().get(i);
+        encode += "\n" + this.user.getPhotoURL();
+        this.msg = new Message(encode.getBytes());
 
         matchedStudentsView = findViewById(R.id.matched_students_view);
 
-        studentsLayoutManager = new LinearLayoutManager(this);
+        studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
         Pair<List<IStudent>, List<Integer>> orderedStudents = orderStudents(students);
@@ -125,7 +128,6 @@ public class HomeActivity extends AppCompatActivity {
         for(IStudent curr: currOrder) {
             int cc = 0;
             List<String> courses = curr.getClasses();
-            AppDatabase db = AppDatabase.singleton(getApplicationContext());
             for(String c : courses) {
                 if(user.getClasses().contains(c)){
                     cc++;
@@ -179,17 +181,29 @@ public class HomeActivity extends AppCompatActivity {
             //put information into database
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(TAG, "Found message: " + new String(message.getContent()));
-            }
+                String decode = new String(message.getContent());
+                String[] pieces = decode.split("\n");
+                Student student = new Student(db.studentWithCoursesDao().getAll().size() + 1, pieces[0],
+                        pieces[pieces.length - 1]);
+                db.studentWithCoursesDao().insert(student);
+                for(int i = 1; i < pieces.length - 1; i++) {
+                    String[] courseTitle = pieces[i].split(" ");
+                    Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, student.studentId,
+                            Integer.parseInt(courseTitle[0]), courseTitle[1], courseTitle[2],
+                            Integer.parseInt(courseTitle[3]));
+                    db.coursesDao().insert(newCourse);
+                }
 
-            @Override
-            public void onLost(@NonNull Message message) {
-                Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+                students = db.studentWithCoursesDao().getAll();
+                students.remove(0);
+                Pair<List<IStudent>, List<Integer>> orderedStudents = orderStudents(students);
+                studentsViewAdapter.addStudent(orderedStudents.first
+                        , orderedStudents.second);
             }
         };
 
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 3, "Hello world!");
+        this.messageListener = new FakedMessageListener(realListener, 10, "Jacob\n2021 FA CSE 110\nwww.google.com");
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(msg);
     }
