@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.singleton(getApplicationContext());
 
         //FOR TESTING STORY 8
-        db.clearAllTables();
+        /*db.clearAllTables();
         Student user_temp = new Student(USER_ID,"Daniel", "");
         Student friend1 = new Student(1, "Elizabeth", "");
         Student friend2 = new Student(2, "Rye", "");
@@ -97,13 +97,17 @@ public class HomeActivity extends AppCompatActivity {
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
                 4, 2020, "SP", "CSE", 101));
         db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2020, "SP", "PHIL", 27));
+                4, 2020, "SP", "PHIL", 27));*/
 
         // END OF TESTING
 
         List<? extends IStudent> students = db.studentWithCoursesDao().getAll();
         user = students.remove(0);
-        this.msg = new Message("Daniel".getBytes());
+        String encode = this.user.getName();
+        for(int i = 0; i < this.user.getClasses().size(); i++)
+            encode += "\n" + this.user.getClasses().get(i);
+        encode += "\n" + this.user.getPhotoURL();
+        this.msg = new Message(encode.getBytes());
 
         matchedStudentsView = findViewById(R.id.matched_students_view);
 
@@ -179,17 +183,26 @@ public class HomeActivity extends AppCompatActivity {
             //put information into database
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(TAG, "Found message: " + new String(message.getContent()));
-            }
+                AppDatabase db = AppDatabase.singleton(getApplicationContext());
 
-            @Override
-            public void onLost(@NonNull Message message) {
-                Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+                String decode = new String(message.getContent());
+                String[] pieces = decode.split("\n");
+                Student student = new Student(db.studentWithCoursesDao().count(), pieces[0], pieces[pieces.length - 1]);
+                db.studentWithCoursesDao().insert(student);
+                for(int i = 1; i < pieces.length - 1; i++) {
+                    String[] courseTitle = pieces[i].split(" ");
+                    db.coursesDao().insert(new Course(db.coursesDao().count(), student.studentId,
+                            Integer.parseInt(courseTitle[0]), courseTitle[1], courseTitle[2],
+                            Integer.parseInt(courseTitle[3])));
+
+                }
+
+                Log.d("BOAF", "" + db.studentWithCoursesDao().count());
             }
         };
 
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 3, "Hello world!");
+        this.messageListener = new FakedMessageListener(realListener, 3, "Daniel\n2021 FA CSE 110\nwww.google.com");
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(msg);
     }
