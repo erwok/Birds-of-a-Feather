@@ -215,6 +215,7 @@ public class HomeActivity extends AppCompatActivity {
         Button stop = findViewById(R.id.stop_btn);
         stop.setVisibility(View.GONE);
 
+        ((FakedMessageListener) messageListener).stopExecutor();
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
         Nearby.getMessagesClient(this).unpublish(this.msg);
     }

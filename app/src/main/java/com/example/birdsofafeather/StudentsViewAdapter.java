@@ -1,5 +1,6 @@
 package com.example.birdsofafeather;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import java.util.List;
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
     private List<? extends IStudent> students;
     private List<Integer> commCourses;
+    private View view;
 
     public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commCourses) {
         super();
@@ -29,7 +31,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     @NonNull
     @Override
     public StudentsViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
+        view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.student_row, parent, false);
 
@@ -49,12 +51,12 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     public void addStudent(List<IStudent> students, List<Integer> commCourses) {
         this.students = students;
         this.commCourses = commCourses;
-        for(int i = 0; i < students.size(); i++) {
-            System.out.println(students.get(i).getName());
-            System.out.println(students.size());
-            this.notifyItemChanged(i);
-        }
-        System.out.println("woobeedoobee");
+        ((Activity) view.getContext()).runOnUiThread(new Runnable() {
+           @Override
+           public void run() {
+               notifyItemRangeChanged(0, students.size());
+           }
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
