@@ -15,6 +15,9 @@
         <activity
             android:name=".headshot"
             android:exported="false" />
+        <activity
+            android:name=".StudentDetailActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
