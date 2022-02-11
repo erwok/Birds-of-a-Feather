@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
@@ -35,7 +37,11 @@ public class StudentDetailActivity extends AppCompatActivity {
         TextView studentMatched = findViewById(R.id.student_matched_textview);
         studentName.setText(student.getName());
         studentMatched.setText(getString(R.string.matched_courses, numCommonCourses));
-        // ImageView studentImage = set for pfp
+        ImageView studentImage = findViewById(R.id.student_profile_imageview);
+        Glide.with(this)
+                .load(student.getPhotoURL())
+                .fitCenter()
+                .into(studentImage);
 
         RecyclerView courseRecyclerView = findViewById(R.id.matched_courses_recyclerview);
         RecyclerView.LayoutManager courseLayoutManager = new LinearLayoutManager(this);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.List;
@@ -86,7 +87,10 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             this.student = student;
             this.studentNameView.setText(student.getName());
             this.matchedCoursesView.setText(itemView.getContext().getString(R.string.matched_courses, this.student.getCommonCourseCount()));
-            // TODO implement PFP
+            Glide.with(itemView)
+                    .load(student.getPhotoURL())
+                    .fitCenter()
+                    .into(studentPfpView);
         }
 
         @Override
