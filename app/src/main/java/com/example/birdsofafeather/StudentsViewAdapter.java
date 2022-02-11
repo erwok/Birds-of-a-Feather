@@ -3,6 +3,7 @@ package com.example.birdsofafeather;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,15 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     public static final String STUDENT_ID_EXTRA = "student_id";
     public static final String COMMON_COURSES_EXTRA = "common_courses";
 
+    private static final String TAG = "BoaF_StudentsViewAdapter";
+
     private List<StudentWithCourses> students;
     private View view;
 
     public StudentsViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
+        Log.d(TAG, "Students length: " + students.size());
     }
 
     @NonNull
@@ -71,6 +75,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         }
 
         public void setPerson(StudentWithCourses student) {
+            Log.d(TAG, "Set person " + student.getName());
             this.student = student;
             this.studentNameView.setText(student.getName());
             this.matchedCoursesView.setText(itemView.getContext().getString(R.string.matched_courses, this.student.getCommonCourseCount()));

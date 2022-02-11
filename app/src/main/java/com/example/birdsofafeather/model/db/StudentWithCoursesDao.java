@@ -15,7 +15,7 @@ public interface StudentWithCoursesDao {
     StudentWithCourses getUser();
 
     @Transaction
-    @Query("SELECT * FROM students WHERE is_user='FALSE' ORDER BY common_courses DESC")
+    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY common_courses DESC")
     List<StudentWithCourses> getSortedOtherStudents();
 
     @Query("SELECT * FROM students WHERE id=:id")

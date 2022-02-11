@@ -1,5 +1,7 @@
 package com.example.birdsofafeather.model.db;
 
+import android.util.Log;
+
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
@@ -10,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentWithCourses {
+
+    private static final String TAG = "BoaF_StudentWithCourses";
+
     @Embedded
     public Student student;
 
@@ -34,7 +39,7 @@ public class StudentWithCourses {
 
 
     public StudentWithCourses() {
-
+        courses = new ArrayList<>();
     }
 
     /**
@@ -49,13 +54,19 @@ public class StudentWithCourses {
 
         int nameLength = inputStream.read();
         byte[] nameBytes = new byte[nameLength];
-        inputStream.read(nameBytes, 0, nameLength);
+        if (inputStream.read(nameBytes, 0, nameLength) < nameLength) {
+            Log.e(TAG, "Reading name, expected " + nameLength + "bytes and got less.");
+            throw new IllegalArgumentException("Invalid bytearray!");
+        }
         String studentName = new String(nameBytes, StandardCharsets.US_ASCII);
 
         int photoURLLength = inputStream.read() << 8;
         photoURLLength += inputStream.read();
         byte[] photoURLBytes = new byte[photoURLLength];
-        inputStream.read(photoURLBytes, 0, photoURLLength);
+        if (inputStream.read(photoURLBytes, 0, photoURLLength) < photoURLLength)  {
+            Log.e(TAG, "Reading photo URL, expected " + photoURLLength + "bytes and got less.");
+            throw new IllegalArgumentException("Invalid bytearray!");
+        }
         String photoURL = new String(photoURLBytes, StandardCharsets.US_ASCII);
 
         student = new Student(studentID, studentName, photoURL);
@@ -63,7 +74,10 @@ public class StudentWithCourses {
         while(inputStream.available() > 0) {
             int courseBytesLength = inputStream.read();
             byte[] courseBytes = new byte[courseBytesLength];
-            inputStream.read(courseBytes, 0, courseBytesLength);
+            if (inputStream.read(courseBytes, 0, courseBytesLength) < courseBytesLength) {
+                Log.e(TAG, "Reading course title, expected " + courseBytesLength + "bytes and got less.");
+                throw new IllegalArgumentException("Invalid bytearray!");
+            }
             courses.add(new String(courseBytes, StandardCharsets.US_ASCII));
         }
     }
