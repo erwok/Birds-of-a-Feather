@@ -9,9 +9,13 @@
 
     <ImageView
         android:id="@+id/student_profile_imageview"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="115dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/student_name_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,24 +25,24 @@
         android:id="@+id/student_name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="16dp"
         android:text="Name"
         android:textSize="34sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/student_matched_textview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_profile_imageview" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/student_matched_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="16dp"
         android:text="Matched Courses: #"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/matched_courses_recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_name_textview" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/close_button"
@@ -54,13 +58,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/matched_courses_recyclerview"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/close_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_matched_textview" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
