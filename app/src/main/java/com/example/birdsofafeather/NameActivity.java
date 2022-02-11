@@ -39,10 +39,12 @@ public class NameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(NAME_PREFERENCE_KEY);
-        editor.commit();
+
+        // For debugging
+//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.remove(NAME_PREFERENCE_KEY);
+//        editor.commit();
 
         editTextName = findViewById(R.id.editTextName);
         confirmButton = findViewById(R.id.confirmButton);
@@ -61,9 +63,6 @@ public class NameActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
             }
-
-
-
         });
 
 
@@ -89,7 +88,7 @@ public class NameActivity extends AppCompatActivity {
 
         editor.apply();
 
-        Intent intent = new Intent(this, headshot.class);
+        Intent intent = new Intent(this, HeadshotActivity.class);
         startActivity(intent);
     }
 
