@@ -23,13 +23,14 @@ public class Course {
     @ColumnInfo(name="subject")
     public String subject;
 
+    // String because of 20A, 20B, etc. classes
     @ColumnInfo(name="course_num")
-    public int courseNum;
+    public String courseNum;
 
     @ColumnInfo(name = "course_title")
     public String courseTitle;
 
-    public Course(int studentId, int year, String quarter, String subject, int courseNum) {
+    public Course(int studentId, int year, String quarter, String subject, String courseNum) {
         this.studentId = studentId;
         this.year = year;
         this.quarter = quarter;
@@ -46,6 +47,6 @@ public class Course {
         this.year = Integer.parseInt(splitTitle[0]);
         this.quarter = splitTitle[1];
         this.subject = splitTitle[2];
-        this.courseNum = Integer.parseInt(splitTitle[3]);
+        this.courseNum = splitTitle[3];
     }
 }

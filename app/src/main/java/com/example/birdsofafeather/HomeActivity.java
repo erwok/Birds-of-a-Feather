@@ -26,7 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
     public static final int USER_ID = 0;
 
-    private Message msg;
+    private Message publishedMessage;
     protected RecyclerView matchedStudentsView;
     protected RecyclerView.LayoutManager studentsLayoutManager;
     protected StudentsViewAdapter studentsViewAdapter;
@@ -59,17 +59,17 @@ public class HomeActivity extends AppCompatActivity {
         db.studentWithCoursesDao().insert(friend3);
         db.studentWithCoursesDao().insert(friend4);
         db.studentWithCoursesDao().insert(friend5);
-        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", 110));
-        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "110"));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "CSE", "101"));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "MATH", "20A"));
 
-        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", 110));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
 
-        db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
 
         Log.d(TAG, "Student 1 name: " + db.studentWithCoursesDao().get(1).getName());
         Log.d(TAG, "Student 1 isUser: " + db.studentWithCoursesDao().get(1).student.isUser);
@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
         List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(); // May not be sorted yet, we do that later
-        this.msg = new Message(user.toByteArray());
+        this.publishedMessage = new Message(user.toByteArray());
 
         matchedStudentsView = findViewById(R.id.matched_students_view);
 
@@ -131,12 +131,12 @@ public class HomeActivity extends AppCompatActivity {
 
         StudentWithCourses fakedMessageStudent = new StudentWithCourses();
         fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
-        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", 110).courseTitle);
+        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);
 
         //eventually not faked
         this.messageListener = new FakedMessageListener(realListener, 10, fakedMessageStudent.toByteArray());
         Nearby.getMessagesClient(this).subscribe(messageListener);
-        Nearby.getMessagesClient(this).publish(msg);
+        Nearby.getMessagesClient(this).publish(publishedMessage);
     }
 
     public void onStopClicked(View view) {
@@ -148,6 +148,6 @@ public class HomeActivity extends AppCompatActivity {
 
         ((FakedMessageListener) messageListener).stopExecutor();
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
-        Nearby.getMessagesClient(this).unpublish(this.msg);
+        Nearby.getMessagesClient(this).unpublish(this.publishedMessage);
     }
 }
