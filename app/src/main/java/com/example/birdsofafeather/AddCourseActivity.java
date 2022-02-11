@@ -26,7 +26,7 @@ public class AddCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, QUARTERS);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.editQuarterTextView);
         textView.setAdapter(adapter);
@@ -60,6 +60,8 @@ public class AddCourseActivity extends AppCompatActivity {
             Course newCourse = new Course(HomeActivity.USER_ID, year, quarter, subject, courseNum);
 
             AppDatabase.singleton(this).coursesDao().insert(newCourse);
+            // We've added a new shared course, so invalidate all previous shared course counts.
+            AppDatabase.singleton(this).studentWithCoursesDao().resetSharedCourses();
 
             CourseUtilities.showAlert(this, "Course added!");
 

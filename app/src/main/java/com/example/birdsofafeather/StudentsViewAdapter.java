@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.birdsofafeather.model.IStudent;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.List;
 
@@ -21,14 +21,12 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     public static final String STUDENT_ID_EXTRA = "student_id";
     public static final String COMMON_COURSES_EXTRA = "common_courses";
 
-    private List<? extends IStudent> students;
-    private List<Integer> commonCourseCounts;
+    private List<StudentWithCourses> students;
     private View view;
 
-    public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commonCourseCounts) {
+    public StudentsViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
-        this.commonCourseCounts = commonCourseCounts;
     }
 
     @NonNull
@@ -43,7 +41,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull StudentsViewAdapter.ViewHolder holder, int position) {
-        holder.setPerson(students.get(position), commonCourseCounts.get(position));
+        holder.setPerson(students.get(position));
     }
 
     @Override
@@ -51,9 +49,8 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         return this.students.size();
     }
 
-    public void addStudent(List<IStudent> students, List<Integer> commCourses) {
+    public void addStudent(List<StudentWithCourses> students) {
         this.students = students;
-        this.commonCourseCounts = commCourses;
         ((Activity) view.getContext()).runOnUiThread(() -> notifyItemRangeChanged(0, students.size()));
     }
 
@@ -62,8 +59,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final ImageView studentPfpView;
         private final TextView matchedCoursesView;
 
-        private IStudent student;
-        private int commonCourseCount;
+        private StudentWithCourses student;
 
 
         ViewHolder(View itemView) {
@@ -74,11 +70,10 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             itemView.setOnClickListener(this);
         }
 
-        public void setPerson(IStudent student, int commonCourseCount) {
+        public void setPerson(StudentWithCourses student) {
             this.student = student;
             this.studentNameView.setText(student.getName());
-            this.commonCourseCount = commonCourseCount;
-            this.matchedCoursesView.setText(itemView.getContext().getString(R.string.matched_courses, this.commonCourseCount));
+            this.matchedCoursesView.setText(itemView.getContext().getString(R.string.matched_courses, this.student.getCommonCourseCount()));
             // TODO implement PFP
         }
 
@@ -87,7 +82,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             Context context = view.getContext();
             Intent intent = new Intent(context, StudentDetailActivity.class);
             intent.putExtra(STUDENT_ID_EXTRA, this.student.getId());
-            intent.putExtra(COMMON_COURSES_EXTRA, commonCourseCount);
+            intent.putExtra(COMMON_COURSES_EXTRA, this.student.getCommonCourseCount());
             context.startActivity(intent);
         }
     }

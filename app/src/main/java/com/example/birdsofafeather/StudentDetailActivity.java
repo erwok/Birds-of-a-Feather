@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,9 @@ public class StudentDetailActivity extends AppCompatActivity {
         int studentId = intent.getIntExtra(StudentsViewAdapter.STUDENT_ID_EXTRA, 0);
         int numCommonCourses = intent.getIntExtra(StudentsViewAdapter.COMMON_COURSES_EXTRA, 0);
 
-        IStudent student = AppDatabase.singleton(this).studentWithCoursesDao().get(studentId);
+        StudentWithCourses student = AppDatabase.singleton(this).studentWithCoursesDao().get(studentId);
         List<String> studentCourses = student.getClasses();
-        IStudent user = AppDatabase.singleton(this).studentWithCoursesDao().get(HomeActivity.USER_ID);
+        StudentWithCourses user = AppDatabase.singleton(this).studentWithCoursesDao().get(HomeActivity.USER_ID);
         List<String> userCourses = user.getClasses();
 
         List<String> matchedCourses = new ArrayList<>();
