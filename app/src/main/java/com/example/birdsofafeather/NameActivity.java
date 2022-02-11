@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.birdsofafeather.model.db.AppDatabase;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
@@ -24,7 +25,7 @@ import com.google.android.gms.common.api.ApiException;
 
 public class NameActivity extends AppCompatActivity {
 
-    public static final String NAME_PREFERENCE_KEY = "name";
+    public static final String NAME_EXTRA = "name";
 
     private static final int REQ_ONE_TAP = 2;
     private static final String TAG = "BoaF_NameActivity";
@@ -80,15 +81,12 @@ public class NameActivity extends AppCompatActivity {
     }
 
     public void saveName(View view) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
         TextView nameView = findViewById(R.id.editTextName);
-        editor.putString(NAME_PREFERENCE_KEY, nameView.getText().toString());
-
-        editor.apply();
 
         Intent intent = new Intent(this, HeadshotActivity.class);
+        // We don't create a DB entry for the user here - we just pass their name to the headshot
+        // activity and do it there.
+        intent.putExtra(NAME_EXTRA, nameView.getText().toString());
         startActivity(intent);
     }
 
@@ -96,7 +94,7 @@ public class NameActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (getPreferences(MODE_PRIVATE).getString(NAME_PREFERENCE_KEY, "").isEmpty()) {
+        if (AppDatabase.singleton(getApplicationContext()).studentWithCoursesDao().getUser() == null) {
             oneTapClient.beginSignIn(signUpRequest)
                     .addOnSuccessListener(this, result -> {
                         try {

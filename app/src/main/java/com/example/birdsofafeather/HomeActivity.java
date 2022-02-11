@@ -44,38 +44,36 @@ public class HomeActivity extends AppCompatActivity {
         db = AppDatabase.singleton(getApplicationContext());
 
         //FOR TESTING STORY 8
-        db.clearAllTables();
-        Student user_temp = new Student(USER_ID,"Daniel", "");
-        user_temp.isUser = true;
-        Student friend1 = new Student(1, "Elizabeth", "");
-        Student friend2 = new Student(2, "Rye", "");
-        Student friend3 = new Student(3, "Jeff", "");
-        Student friend4 = new Student(4, "Helen", "");
-        Student friend5 = new Student(5, "Eric", "");
+        if (db.studentWithCoursesDao().count() < 2) {
+            Student friend1 = new Student(1, "Elizabeth", "");
+            Student friend2 = new Student(2, "Rye", "");
+            Student friend3 = new Student(3, "Jeff", "");
+            Student friend4 = new Student(4, "Helen", "");
+            Student friend5 = new Student(5, "Eric", "");
 
-        db.studentWithCoursesDao().insert(user_temp);
-        db.studentWithCoursesDao().insert(friend1);
-        db.studentWithCoursesDao().insert(friend2);
-        db.studentWithCoursesDao().insert(friend3);
-        db.studentWithCoursesDao().insert(friend4);
-        db.studentWithCoursesDao().insert(friend5);
-        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "100"));
-        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "110"));
-        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "CSE", "101"));
-        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "MATH", "20A"));
+            db.studentWithCoursesDao().insert(friend1);
+            db.studentWithCoursesDao().insert(friend2);
+            db.studentWithCoursesDao().insert(friend3);
+            db.studentWithCoursesDao().insert(friend4);
+            db.studentWithCoursesDao().insert(friend5);
 
-        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
-        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
+            db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
+            db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
 
-        db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
-        db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
-        db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
-
-        Log.d(TAG, "Student 1 name: " + db.studentWithCoursesDao().get(1).getName());
-        Log.d(TAG, "Student 1 isUser: " + db.studentWithCoursesDao().get(1).student.isUser);
+            db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
+            db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
+            db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
+        }
 
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
+
+        Log.d(TAG, "User name: " + user.getName());
+        Log.d(TAG, "User URL: " + user.getPhotoURL());
+        for (String course : user.courses) {
+            Log.d(TAG, "User course: " + course);
+        }
+
         List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(); // May not be sorted yet, we do that later
         this.publishedMessage = new Message(user.toByteArray());
 

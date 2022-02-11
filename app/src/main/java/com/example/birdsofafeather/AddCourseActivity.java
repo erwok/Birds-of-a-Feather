@@ -63,6 +63,9 @@ public class AddCourseActivity extends AppCompatActivity {
             // We've added a new shared course, so invalidate all previous shared course counts.
             AppDatabase.singleton(this).studentWithCoursesDao().resetSharedCourses();
 
+            // Reset the course number
+            courseNumTextView.setText("");
+
             CourseUtilities.showAlert(this, "Course added!");
 
         } catch (Exception ex) {
