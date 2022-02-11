@@ -32,7 +32,7 @@ public class Story4Test {
     }
 
     @Test
-    public void testLaunchesAddCourse() {
+    public void testLaunchesHeadshot() {
         scenario.onActivity(activity ->{
             TextView editTextName = activity.findViewById(R.id.editTextName);
             editTextName.setText("Elizabeth");
@@ -40,7 +40,7 @@ public class Story4Test {
             Button button = activity.findViewById(R.id.confirmButton);
             button.callOnClick();
 
-            Intent expectedIntent = new Intent(activity, AddCourseActivity.class);
+            Intent expectedIntent = new Intent(activity, headshot.class);
             ShadowActivity shadowActivity = Shadows.shadowOf(activity);
             Intent actualIntent = shadowActivity.getNextStartedActivity();
             assertTrue(actualIntent.filterEquals(expectedIntent));
