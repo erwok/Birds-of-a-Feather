@@ -27,16 +27,9 @@ public class StudentDetailActivity extends AppCompatActivity {
         int numCommonCourses = intent.getIntExtra(StudentsViewAdapter.COMMON_COURSES_EXTRA, 0);
 
         StudentWithCourses student = AppDatabase.singleton(this).studentWithCoursesDao().get(studentId);
-        List<String> studentCourses = student.getClasses();
-        StudentWithCourses user = AppDatabase.singleton(this).studentWithCoursesDao().get(HomeActivity.USER_ID);
-        List<String> userCourses = user.getClasses();
+        StudentWithCourses user = AppDatabase.singleton(this).studentWithCoursesDao().getUser();
 
-        List<String> matchedCourses = new ArrayList<>();
-        for(String userCourse : userCourses) {
-            if(studentCourses.contains(userCourse)) {
-                matchedCourses.add(userCourse);
-            }
-        }
+        List<String> matchedCourses = student.overlappingClasses(user);
 
         TextView studentName = findViewById(R.id.student_name_textview);
         TextView studentMatched = findViewById(R.id.student_matched_textview);
