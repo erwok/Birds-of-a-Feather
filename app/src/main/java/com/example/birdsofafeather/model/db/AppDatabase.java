@@ -22,6 +22,9 @@ public abstract class AppDatabase extends RoomDatabase {
         return singletonInstance;
     }
 
+    /**
+     * Sets the singleton to be a test database, with nothing in it.
+     */
     public static void useTestSingleton(Context context) {
         singletonInstance = Room.inMemoryDatabaseBuilder(context, AppDatabase.class)
                 .allowMainThreadQueries()

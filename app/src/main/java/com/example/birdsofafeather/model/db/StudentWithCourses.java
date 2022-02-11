@@ -114,6 +114,11 @@ public class StudentWithCourses {
         return outputStream.toByteArray();
     }
 
+    /**
+     * Gets a list of the titles of all the classes this student shares with another.
+     * @param other The student to check for shared classes with
+     * @return A list of the classes this student shares with other.
+     */
     public List<String> overlappingClasses(StudentWithCourses other) {
         List<String> sharedClassTitles = new ArrayList<>();
         for(int i = 0; i < courses.size(); i++) {
@@ -124,6 +129,11 @@ public class StudentWithCourses {
         return sharedClassTitles;
     }
 
+    /**
+     * Count how many courses this student shares with the user, and set that as this student's
+     * commonCourses.
+     * @param user The StudentWithCourses representing the user of this app
+     */
     public void calculateSharedCourseCount(StudentWithCourses user) {
         student.commonCourses = overlappingClasses(user).size();
     }

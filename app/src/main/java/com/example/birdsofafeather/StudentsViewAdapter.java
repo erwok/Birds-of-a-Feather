@@ -27,6 +27,9 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     private List<StudentWithCourses> students;
     private View view;
 
+    /**
+     * @param students A list of non-user students, sorted from most to least courses shared with the user.
+     */
     public StudentsViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
@@ -53,7 +56,11 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         return this.students.size();
     }
 
+    /**
+     * @param students A list of non-user students, sorted from most to least courses shared with the user.
+     */
     public void addStudent(List<StudentWithCourses> students) {
+        // We don't know where the new student was inserted, so refresh everything.
         this.students = students;
         ((Activity) view.getContext()).runOnUiThread(() -> notifyItemRangeChanged(0, students.size()));
     }

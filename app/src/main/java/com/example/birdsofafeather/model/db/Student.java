@@ -18,6 +18,9 @@ public class Student {
     @ColumnInfo(name = "photo_URL")
     public String photoURL;
 
+    /**
+     * How many courses this student has in common with the user.
+     */
     @ColumnInfo(name = "common_courses", defaultValue = "-1")
     public int commonCourses = -1;
 

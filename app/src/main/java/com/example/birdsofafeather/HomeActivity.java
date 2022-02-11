@@ -79,16 +79,15 @@ public class HomeActivity extends AppCompatActivity {
         List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(); // May not be sorted yet, we do that later
         this.publishedMessage = new Message(user.toByteArray());
 
-        matchedStudentsView = findViewById(R.id.matched_students_view);
-
-        studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
-        matchedStudentsView.setLayoutManager(studentsLayoutManager);
-
         // Calculate number of shared courses
         for (StudentWithCourses student : students) {
             student.calculateSharedCourseCount(user);
             db.studentWithCoursesDao().updateStudent(student.student);
         }
+
+        matchedStudentsView = findViewById(R.id.matched_students_view);
+        studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
+        matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
         studentsViewAdapter = new StudentsViewAdapter(db.studentWithCoursesDao().getSortedOtherStudents());
         matchedStudentsView.setAdapter(studentsViewAdapter);
@@ -112,6 +111,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found message!");
                 StudentWithCourses foundStudent;
+                // Make sure we received a valid message.
                 try {
                     foundStudent = new StudentWithCourses(db.studentWithCoursesDao().count() + 1, message.getContent());
                 } catch (IllegalArgumentException e) {
@@ -129,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
 
+        // Build a fake student
         StudentWithCourses fakedMessageStudent = new StudentWithCourses();
         fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
         fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);

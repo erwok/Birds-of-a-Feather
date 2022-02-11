@@ -39,6 +39,11 @@ public class Course {
         this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum;
     }
 
+    /**
+     * Construct a course from a courseTitle
+     * @param courseTitle The course title, formatted as "year quarter subject courseNum"
+     * @param studentId The ID for the student who took this course.
+     */
     @Ignore // So room doesn't get confused and try to use this constructor
     public Course(String courseTitle, int studentId) {
         this.courseTitle = courseTitle;
