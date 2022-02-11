@@ -11,11 +11,6 @@ import android.widget.TextView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.birdsofafeather.AddCourseActivity;
-import com.example.birdsofafeather.NameActivity;
-import com.example.birdsofafeather.R;
-import com.example.birdsofafeather.headshot;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +20,13 @@ import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowDialog;
 
 @RunWith(AndroidJUnit4.class)
-public class story5Test {
+public class Story5Test {
 
-    ActivityScenario<headshot> scenario;
+    ActivityScenario<HeadshotActivity> scenario;
 
     @Before
     public void init() {
-        scenario = ActivityScenario.launch(headshot.class);
+        scenario = ActivityScenario.launch(HeadshotActivity.class);
     }
 
     @Test

@@ -9,18 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDetailActivity extends AppCompatActivity {
-    private final String MATCHED_COURSES = "Matched Courses: ";
-    private static final int USER_ID = 0;
-
-    private AppDatabase db;
-    private IStudent student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,26 +23,18 @@ public class StudentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_detail);
 
         Intent intent = getIntent();
-        int studentId = intent.getIntExtra("student_id", 0);
-        int commCourses = intent.getIntExtra("comm_courses", 0);
+        int studentId = intent.getIntExtra(StudentsViewAdapter.STUDENT_ID_EXTRA, 0);
+        int numCommonCourses = intent.getIntExtra(StudentsViewAdapter.COMMON_COURSES_EXTRA, 0);
 
-        db = AppDatabase.singleton(this);
-        student = db.studentWithCoursesDao().get(studentId);
-        List<String> studentCourses = student.getClasses();
-        IStudent user = db.studentWithCoursesDao().get(USER_ID);
-        List<String> userCourses = user.getClasses();
+        StudentWithCourses student = AppDatabase.singleton(this).studentWithCoursesDao().get(studentId);
+        StudentWithCourses user = AppDatabase.singleton(this).studentWithCoursesDao().getUser();
 
-        List<String> matchedCourses = new ArrayList<>();
-        for(String uc : userCourses) {
-            if(studentCourses.contains(uc)) {
-                matchedCourses.add(uc);
-            }
-        }
+        List<String> matchedCourses = student.overlappingClasses(user);
 
         TextView studentName = findViewById(R.id.student_name_textview);
         TextView studentMatched = findViewById(R.id.student_matched_textview);
         studentName.setText(student.getName());
-        studentMatched.setText(MATCHED_COURSES + commCourses);
+        studentMatched.setText(getString(R.string.matched_courses, numCommonCourses));
         // ImageView studentImage = set for pfp
 
         RecyclerView courseRecyclerView = findViewById(R.id.matched_courses_recyclerview);

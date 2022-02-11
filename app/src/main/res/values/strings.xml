@@ -15,6 +15,11 @@
     <string name="course_example">E.g. 110</string>
     <string name="matched_bof_label">Matched BoF</string>
     <string name="close">Close</string>
+    <string name="matched_courses">Matched Courses: %1$d</string>
+    <string name="photo_url_prompt">Please upload your profile picture in\nURL format in the box below.</string>
+    <string name="url_hint">URL</string>
+    <string name="submit">Submit</string>
+    <string name="url_ending_restriction">.jpg or .png only</string>
 
 
 </resources>

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,46 +12,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.birdsofafeather.model.DummyStudent;
-import com.example.birdsofafeather.model.IStudent;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String TAG = "BoaF";
-    private static final int USER_ID = 0;
-    private Message msg;
+    private static final String TAG = "BoaF_Home";
+    public static final int USER_ID = 0;
+
+    private Message publishedMessage;
     protected RecyclerView matchedStudentsView;
     protected RecyclerView.LayoutManager studentsLayoutManager;
     protected StudentsViewAdapter studentsViewAdapter;
     private MessageListener messageListener;
     private AppDatabase db;
-    private List<? extends IStudent> students;
 
-    protected IStudent user = new DummyStudent(0, "Daniel", "",
-            new String[] {
-                    "DUMMY COURSE 1"
-            });
-    protected IStudent[] data_dummy = {
-            new DummyStudent(1, "Elizabeth", "", new String[]{
-                    "DUMMY COURSE 1"
-            }),
-            new DummyStudent(2, "Rye", "", new String[]{}),
-            new DummyStudent(3, "Jeff", "", new String[]{}),
-            new DummyStudent(4, "Helen", "", new String[]{
-                    "DUMMY COURSE 1"
-            }),
-            new DummyStudent(5, "Eric", "", new String[]{})
-    };
+    protected StudentWithCourses user;
 
     @SuppressLint("WrongThread")
     @Override
@@ -65,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         //FOR TESTING STORY 8
         db.clearAllTables();
         Student user_temp = new Student(USER_ID,"Daniel", "");
+        user_temp.isUser = true;
         Student friend1 = new Student(1, "Elizabeth", "");
         Student friend2 = new Student(2, "Rye", "");
         Student friend3 = new Student(3, "Jeff", "");
@@ -77,97 +59,43 @@ public class HomeActivity extends AppCompatActivity {
         db.studentWithCoursesDao().insert(friend3);
         db.studentWithCoursesDao().insert(friend4);
         db.studentWithCoursesDao().insert(friend5);
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2021, "FA", "CSE", 110));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", "110"));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "CSE", "101"));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "MATH", "20A"));
 
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                1, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                1, 2021, "FA", "CSE", 110));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
 
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
+
+        Log.d(TAG, "Student 1 name: " + db.studentWithCoursesDao().get(1).getName());
+        Log.d(TAG, "Student 1 isUser: " + db.studentWithCoursesDao().get(1).student.isUser);
 
         // END OF TESTING
+        user = db.studentWithCoursesDao().getUser();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(); // May not be sorted yet, we do that later
+        this.publishedMessage = new Message(user.toByteArray());
 
-        students = db.studentWithCoursesDao().getAll();
-        user = students.remove(0);
-        String encode = this.user.getName();
-        for(int i = 0; i < this.user.getClasses().size(); i++)
-            encode += "\n" + this.user.getClasses().get(i);
-        encode += "\n" + this.user.getPhotoURL();
-        this.msg = new Message(encode.getBytes());
+        // Calculate number of shared courses
+        for (StudentWithCourses student : students) {
+            student.calculateSharedCourseCount(user);
+            db.studentWithCoursesDao().updateStudent(student.student);
+        }
 
         matchedStudentsView = findViewById(R.id.matched_students_view);
-
         studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
-        Pair<List<IStudent>, List<Integer>> orderedStudents = orderStudents(students);
-        studentsViewAdapter = new StudentsViewAdapter(orderedStudents.first
-                , orderedStudents.second);
+        studentsViewAdapter = new StudentsViewAdapter(db.studentWithCoursesDao().getSortedOtherStudents());
         matchedStudentsView.setAdapter(studentsViewAdapter);
-    }
-
-    private Pair<List<IStudent>, List<Integer>> orderStudents(List<? extends IStudent> currOrder) {
-        List<Integer> commCourses = new ArrayList<>();
-        List<IStudent> newOrder = new ArrayList<>();
-
-        PriorityQueue<StudentByCommonCourses> pq = new PriorityQueue<>();
-
-        for(IStudent curr: currOrder) {
-            int cc = 0;
-            List<String> courses = curr.getClasses();
-            for(String c : courses) {
-                if(user.getClasses().contains(c)){
-                    cc++;
-                }
-            }
-
-            pq.add(new StudentByCommonCourses(curr, cc));
-        }
-
-        while(!pq.isEmpty()) {
-            StudentByCommonCourses sbcc = pq.poll();
-            newOrder.add(sbcc.student);
-            commCourses.add(sbcc.commCourse);
-        }
-
-        return new Pair<>(newOrder, commCourses);
     }
 
     public void onAddCoursesClicked(View view) {
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
-    }
-
-    protected class StudentByCommonCourses implements Comparable {
-        protected IStudent student;
-        protected int commCourse;
-
-        protected StudentByCommonCourses (IStudent student, int cc) {
-            this.student = student;
-            this.commCourse = cc;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-            if(o instanceof StudentByCommonCourses) {
-                return ((StudentByCommonCourses)o).commCourse - this.commCourse;
-            } else {
-                return 0;
-            }
-        }
     }
 
     public void onStartClicked(View view) {
@@ -181,31 +109,35 @@ public class HomeActivity extends AppCompatActivity {
             //put information into database
             @Override
             public void onFound(@NonNull Message message) {
-                String decode = new String(message.getContent());
-                String[] pieces = decode.split("\n");
-                Student student = new Student(db.studentWithCoursesDao().getAll().size() + 1, pieces[0],
-                        pieces[pieces.length - 1]);
-                db.studentWithCoursesDao().insert(student);
-                for(int i = 1; i < pieces.length - 1; i++) {
-                    String[] courseTitle = pieces[i].split(" ");
-                    Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, student.studentId,
-                            Integer.parseInt(courseTitle[0]), courseTitle[1], courseTitle[2],
-                            Integer.parseInt(courseTitle[3]));
-                    db.coursesDao().insert(newCourse);
+                Log.d(TAG, "Found message!");
+                StudentWithCourses foundStudent;
+                // Make sure we received a valid message.
+                try {
+                    foundStudent = new StudentWithCourses(db.studentWithCoursesDao().count() + 1, message.getContent());
+                } catch (IllegalArgumentException e) {
+                    Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
+                    return;
+                }
+                foundStudent.calculateSharedCourseCount(user);
+                db.studentWithCoursesDao().insert(foundStudent.student);
+                for(String courseTitle : foundStudent.courses) {
+                    db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                 }
 
-                students = db.studentWithCoursesDao().getAll();
-                students.remove(0);
-                Pair<List<IStudent>, List<Integer>> orderedStudents = orderStudents(students);
-                studentsViewAdapter.addStudent(orderedStudents.first
-                        , orderedStudents.second);
+                Log.d(TAG, "New otherStudents size: " + db.studentWithCoursesDao().getSortedOtherStudents());
+                studentsViewAdapter.addStudent(db.studentWithCoursesDao().getSortedOtherStudents());
             }
         };
 
+        // Build a fake student
+        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
+        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
+        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);
+
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 10, "Jacob\n2021 FA CSE 110\nwww.google.com");
+        this.messageListener = new FakedMessageListener(realListener, 10, fakedMessageStudent.toByteArray());
         Nearby.getMessagesClient(this).subscribe(messageListener);
-        Nearby.getMessagesClient(this).publish(msg);
+        Nearby.getMessagesClient(this).publish(publishedMessage);
     }
 
     public void onStopClicked(View view) {
@@ -217,6 +149,6 @@ public class HomeActivity extends AppCompatActivity {
 
         ((FakedMessageListener) messageListener).stopExecutor();
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
-        Nearby.getMessagesClient(this).unpublish(this.msg);
+        Nearby.getMessagesClient(this).unpublish(this.publishedMessage);
     }
 }

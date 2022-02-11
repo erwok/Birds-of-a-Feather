@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
-            android:name=".headshot"
+            android:name=".HeadshotActivity"
             android:exported="false" />
         <activity
             android:name=".StudentDetailActivity"
@@ -23,9 +23,6 @@
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCg4o1Mn7sLD8tG_k4WA9XWxsn5-2nwYn8" />
 
-        <activity
-            android:name=".StartSearchActivity"
-            android:exported="false" />
         <activity
             android:name=".AddCourseActivity"
             android:exported="false" />

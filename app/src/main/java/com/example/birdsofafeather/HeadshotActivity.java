@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.view.View;
 
-public class headshot extends AppCompatActivity {
+public class HeadshotActivity extends AppCompatActivity {
 
     public static final String URL_PREFERENCE_KEY = "url";
 
