@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class FakedMessageListener extends MessageListener{
     private final MessageListener messageListener;
-    private ScheduledExecutorService executor;
+    private final ScheduledExecutorService executor;
 
     public FakedMessageListener(MessageListener realMessageListener, int frequency, String messageStr) {
         this.messageListener = realMessageListener;

@@ -9,7 +9,7 @@ public class CourseUtilities {
         alertBuilder
                 .setTitle("Error!")
                 .setMessage(message)
-                .setPositiveButton("OK", ((dialog, id) -> { dialog.cancel(); }))
+                .setPositiveButton("OK", ((dialog, id) -> dialog.cancel()))
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();
@@ -21,7 +21,7 @@ public class CourseUtilities {
         alertBuilder
                 .setTitle("Alert!")
                 .setMessage(message)
-                .setPositiveButton("OK", ((dialog, id) -> { dialog.cancel(); }))
+                .setPositiveButton("OK", ((dialog, id) -> dialog.cancel()))
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();

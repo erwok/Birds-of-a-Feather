@@ -29,7 +29,8 @@ import java.util.PriorityQueue;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF";
-    private static final int USER_ID = 0;
+    public static final int USER_ID = 0;
+
     private Message msg;
     protected RecyclerView matchedStudentsView;
     protected RecyclerView.LayoutManager studentsLayoutManager;

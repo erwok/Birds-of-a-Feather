@@ -13,19 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.IStudent;
-import com.example.birdsofafeather.model.db.Student;
 
 import java.util.List;
 
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
+
+    public static final String STUDENT_ID_EXTRA = "student_id";
+    public static final String COMMON_COURSES_EXTRA = "common_courses";
+
     private List<? extends IStudent> students;
-    private List<Integer> commCourses;
+    private List<Integer> commonCourseCounts;
     private View view;
 
-    public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commCourses) {
+    public StudentsViewAdapter(List<? extends IStudent> students, List<Integer> commonCourseCounts) {
         super();
         this.students = students;
-        this.commCourses = commCourses;
+        this.commonCourseCounts = commonCourseCounts;
     }
 
     @NonNull
@@ -40,7 +43,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull StudentsViewAdapter.ViewHolder holder, int position) {
-        holder.setPerson(students.get(position), commCourses.get(position));
+        holder.setPerson(students.get(position), commonCourseCounts.get(position));
     }
 
     @Override
@@ -50,46 +53,41 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
 
     public void addStudent(List<IStudent> students, List<Integer> commCourses) {
         this.students = students;
-        this.commCourses = commCourses;
-        ((Activity) view.getContext()).runOnUiThread(new Runnable() {
-           @Override
-           public void run() {
-               notifyItemRangeChanged(0, students.size());
-           }
-        });
+        this.commonCourseCounts = commCourses;
+        ((Activity) view.getContext()).runOnUiThread(() -> notifyItemRangeChanged(0, students.size()));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView studNameView;
-        private final ImageView studPfpView;
+        private final TextView studentNameView;
+        private final ImageView studentPfpView;
         private final TextView matchedCoursesView;
-        private IStudent student;
-        private int commonCourses;
 
-        private final String MATCHED_COURSES = "Matched Courses: ";
+        private IStudent student;
+        private int commonCourseCount;
+
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.studNameView = itemView.findViewById(R.id.stud_name_textview);
-            this.studPfpView = itemView.findViewById(R.id.stud_pfp_imageview);
+            this.studentNameView = itemView.findViewById(R.id.stud_name_textview);
+            this.studentPfpView = itemView.findViewById(R.id.stud_pfp_imageview);
             this.matchedCoursesView = itemView.findViewById(R.id.course_name_textview);
             itemView.setOnClickListener(this);
         }
 
-        public void setPerson(IStudent student, int commCourses) {
+        public void setPerson(IStudent student, int commonCourseCount) {
             this.student = student;
-            this.studNameView.setText(student.getName());
-            this.commonCourses = commCourses;
-            this.matchedCoursesView.setText(MATCHED_COURSES + commonCourses);
-            // pfp not implemented yet
+            this.studentNameView.setText(student.getName());
+            this.commonCourseCount = commonCourseCount;
+            this.matchedCoursesView.setText(itemView.getContext().getString(R.string.matched_courses, this.commonCourseCount));
+            // TODO implement PFP
         }
 
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, StudentDetailActivity.class);
-            intent.putExtra("student_id", this.student.getId());
-            intent.putExtra("comm_courses", commonCourses);
+            intent.putExtra(STUDENT_ID_EXTRA, this.student.getId());
+            intent.putExtra(COMMON_COURSES_EXTRA, commonCourseCount);
             context.startActivity(intent);
         }
     }

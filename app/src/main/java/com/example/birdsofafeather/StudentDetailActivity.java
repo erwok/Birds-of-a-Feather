@@ -16,11 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDetailActivity extends AppCompatActivity {
-    private final String MATCHED_COURSES = "Matched Courses: ";
-    private static final int USER_ID = 0;
-
-    private AppDatabase db;
-    private IStudent student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,26 +23,25 @@ public class StudentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_detail);
 
         Intent intent = getIntent();
-        int studentId = intent.getIntExtra("student_id", 0);
-        int commCourses = intent.getIntExtra("comm_courses", 0);
+        int studentId = intent.getIntExtra(StudentsViewAdapter.STUDENT_ID_EXTRA, 0);
+        int numCommonCourses = intent.getIntExtra(StudentsViewAdapter.COMMON_COURSES_EXTRA, 0);
 
-        db = AppDatabase.singleton(this);
-        student = db.studentWithCoursesDao().get(studentId);
+        IStudent student = AppDatabase.singleton(this).studentWithCoursesDao().get(studentId);
         List<String> studentCourses = student.getClasses();
-        IStudent user = db.studentWithCoursesDao().get(USER_ID);
+        IStudent user = AppDatabase.singleton(this).studentWithCoursesDao().get(HomeActivity.USER_ID);
         List<String> userCourses = user.getClasses();
 
         List<String> matchedCourses = new ArrayList<>();
-        for(String uc : userCourses) {
-            if(studentCourses.contains(uc)) {
-                matchedCourses.add(uc);
+        for(String userCourse : userCourses) {
+            if(studentCourses.contains(userCourse)) {
+                matchedCourses.add(userCourse);
             }
         }
 
         TextView studentName = findViewById(R.id.student_name_textview);
         TextView studentMatched = findViewById(R.id.student_matched_textview);
         studentName.setText(student.getName());
-        studentMatched.setText(MATCHED_COURSES + commCourses);
+        studentMatched.setText(getString(R.string.matched_courses, numCommonCourses));
         // ImageView studentImage = set for pfp
 
         RecyclerView courseRecyclerView = findViewById(R.id.matched_courses_recyclerview);
