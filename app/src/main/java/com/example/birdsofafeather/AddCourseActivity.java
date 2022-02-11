@@ -74,8 +74,7 @@ public class AddCourseActivity extends AppCompatActivity {
                 throw new Exception();
             }
 
-            Course newCourse = new Course(db.coursesDao().getCourses().size() + 1,
-                    USER_ID, year, quarter, subject, courseNum);
+            Course newCourse = new Course(USER_ID, year, quarter, subject, courseNum);
 
             db.coursesDao().insert(newCourse);
 
@@ -83,7 +82,7 @@ public class AddCourseActivity extends AppCompatActivity {
 
         } catch (Exception ex) {
             CourseUtilities.showError(this, "Something was incorrectly formatted!"
-                    + "\n" + ex.toString());
+                    + "\n" + ex);
         }
     }
 }

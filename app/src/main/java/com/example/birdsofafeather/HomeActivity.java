@@ -77,26 +77,17 @@ public class HomeActivity extends AppCompatActivity {
         db.studentWithCoursesDao().insert(friend3);
         db.studentWithCoursesDao().insert(friend4);
         db.studentWithCoursesDao().insert(friend5);
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2021, "FA", "CSE", 110));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                USER_ID, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", 100));
+        db.coursesDao().insert(new Course(USER_ID, 2021, "FA", "CSE", 110));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "CSE", 101));
+        db.coursesDao().insert(new Course(USER_ID, 2020, "SP", "PHIL", 27));
 
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                1, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                1, 2021, "FA", "CSE", 110));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", 100));
+        db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", 110));
 
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2021, "FA", "CSE", 100));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2020, "SP", "CSE", 101));
-        db.coursesDao().insert(new Course(db.coursesDao().getCourses().size() + 1,
-                4, 2020, "SP", "PHIL", 27));
+        db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", 100));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", 101));
+        db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", 27));
 
         // END OF TESTING
 
@@ -188,7 +179,7 @@ public class HomeActivity extends AppCompatActivity {
                 db.studentWithCoursesDao().insert(student);
                 for(int i = 1; i < pieces.length - 1; i++) {
                     String[] courseTitle = pieces[i].split(" ");
-                    Course newCourse = new Course(db.coursesDao().getCourses().size() + 1, student.studentId,
+                    Course newCourse = new Course(student.studentId,
                             Integer.parseInt(courseTitle[0]), courseTitle[1], courseTitle[2],
                             Integer.parseInt(courseTitle[3]));
                     db.coursesDao().insert(newCourse);

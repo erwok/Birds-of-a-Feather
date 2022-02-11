@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class Course {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "course_id")
-    public int courseId;
+    public int courseId = 0;
 
     @ColumnInfo(name = "student_id")
     public int studentId;
@@ -28,8 +28,7 @@ public class Course {
     @ColumnInfo(name = "course_title")
     public String courseTitle;
 
-    public Course(int courseId, int studentId, int year, String quarter, String subject, int courseNum) {
-        this.courseId = courseId;
+    public Course(int studentId, int year, String quarter, String subject, int courseNum) {
         this.studentId = studentId;
         this.year = year;
         this.quarter = quarter;
