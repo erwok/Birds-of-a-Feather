@@ -1,6 +1,7 @@
 package com.example.birdsofafeather;
 
 import static android.content.Context.MODE_PRIVATE;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.example.birdsofafeather.model.db.AppDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +29,7 @@ public class Story4Test {
 
     @Before
     public void init() {
+        AppDatabase.useTestSingleton(getApplicationContext());
         scenario = ActivityScenario.launch(NameActivity.class);
     }
 
@@ -66,9 +70,10 @@ public class Story4Test {
             assertTrue(button.isEnabled());
 
             button.callOnClick();
-            SharedPreferences shared = activity.getPreferences(MODE_PRIVATE);
-            String var = shared.getString(NameActivity.NAME_PREFERENCE_KEY,"string not in shared preferences");
-            assertEquals(var, "Rye");
+
+            ShadowActivity shadowActivity = Shadows.shadowOf(activity);
+            Intent actualIntent = shadowActivity.getNextStartedActivity();
+            assertEquals("Rye", actualIntent.getStringExtra(NameActivity.NAME_EXTRA));
         });
     }
 

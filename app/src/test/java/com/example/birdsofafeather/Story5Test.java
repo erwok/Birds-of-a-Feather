@@ -1,6 +1,9 @@
 package com.example.birdsofafeather;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.app.AlertDialog;
@@ -10,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,12 +32,13 @@ public class Story5Test {
 
     @Before
     public void init() {
+        AppDatabase.useTestSingleton(getApplicationContext());
         scenario = ActivityScenario.launch(HeadshotActivity.class);
     }
 
     @Test
     public void testPNGFile() {
-        scenario.onActivity(activity ->{
+        scenario.onActivity(activity -> {
 
             TextView url = activity.findViewById(R.id.URLBox);
             url.setText("birdsOfAFeather.png");
@@ -44,7 +51,23 @@ public class Story5Test {
             Intent actualIntent = shadowActivity.getNextStartedActivity();
             assertTrue(actualIntent.filterEquals(expectedIntent));
         });
+    }
 
+    @Test
+    public void testCreateUser() {
+        scenario.onActivity(activity -> {
+            assertNull(AppDatabase.singleton(activity).studentWithCoursesDao().getUser());
+
+            TextView url = activity.findViewById(R.id.URLBox);
+            url.setText("birdsOfAFeather.png");
+
+            Button button = activity.findViewById(R.id.submitButton);
+            button.callOnClick();
+
+            StudentWithCourses user = AppDatabase.singleton(activity).studentWithCoursesDao().getUser();
+            assertNotNull(user);
+            assertEquals("birdsOfAFeather.png", user.student.photoURL);
+        });
     }
 
     @Test
