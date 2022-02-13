@@ -1,9 +1,10 @@
 package com.example.birdsofafeather;
 
 
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,7 @@ public class NameActivity extends AppCompatActivity {
     public static final String NAME_EXTRA = "name";
 
     private static final int REQ_ONE_TAP = 2;
+    private static final int REQUEST_ENABLE_BT = 3;
     private static final String TAG = "BoaF_NameActivity";
 
     private SignInClient oneTapClient;
@@ -90,10 +92,26 @@ public class NameActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onStart() {
         super.onStart();
 
+        // Bluetooth check
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            // Device doesn't support Bluetooth
+            CourseUtilities.showError(this, "Your device doesn't support bluetooth, which is needed for this app.", this::finish);
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+
+        // Name sign-in
         if (AppDatabase.singleton(getApplicationContext()).studentWithCoursesDao().getUser() == null) {
             oneTapClient.beginSignIn(signUpRequest)
                     .addOnSuccessListener(this, result -> {
@@ -120,20 +138,27 @@ public class NameActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQ_ONE_TAP) {
-            try {
-                SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
-                String idToken = credential.getGoogleIdToken();
-                if (idToken != null) {
-                    // Got an ID token from Google. Use it to authenticate
-                    // with your backend.
-                    editTextName.setText(credential.getGivenName());
-                    confirmButton.setEnabled(true);
-                    Log.d(TAG, "Got ID token.");
+        switch (requestCode) {
+            case REQ_ONE_TAP:
+                try {
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
+                    String idToken = credential.getGoogleIdToken();
+                    if (idToken != null) {
+                        // Got an ID token from Google. Use it to authenticate
+                        // with your backend.
+                        editTextName.setText(credential.getGivenName());
+                        confirmButton.setEnabled(true);
+                        Log.d(TAG, "Got ID token.");
+                    }
+                } catch (ApiException e) {
+                    Log.e(TAG, "Error getting ID token. Error: " + e.getLocalizedMessage());
                 }
-            } catch (ApiException e) {
-                Log.e(TAG, "Error getting ID token. Error: " + e.getLocalizedMessage());
-            }
+                break;
+            case REQUEST_ENABLE_BT:
+                if (resultCode == RESULT_CANCELED) {
+                    CourseUtilities.showError(this, "You need to enable Bluetooth for this app, sorry.", this::finish);
+                }
+                break;
         }
     }
 
