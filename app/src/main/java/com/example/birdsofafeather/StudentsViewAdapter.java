@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
@@ -43,7 +44,6 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.student_row, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -60,10 +60,10 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
     /**
      * @param students A list of non-user students, sorted from most to least courses shared with the user.
      */
-    public void addStudent(List<StudentWithCourses> students) {
+    public void addStudent(List<StudentWithCourses> students, Context context) {
         // We don't know where the new student was inserted, so refresh everything.
         this.students = students;
-        ((Activity) view.getContext()).runOnUiThread(() -> notifyItemRangeChanged(0, students.size()));
+        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -72,7 +72,6 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final TextView matchedCoursesView;
 
         private StudentWithCourses student;
-
 
         ViewHolder(View itemView) {
             super(itemView);

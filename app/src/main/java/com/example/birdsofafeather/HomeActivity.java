@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     private AppDatabase db;
 
     protected StudentWithCourses user;
+    private boolean first = true;
 
     @SuppressLint("WrongThread")
     @Override
@@ -44,26 +45,26 @@ public class HomeActivity extends AppCompatActivity {
         db = AppDatabase.singleton(getApplicationContext());
 
         //FOR TESTING STORY 8
-        if (db.studentWithCoursesDao().count() < 2) {
-            Student friend1 = new Student(1, "Elizabeth", "https://ichef.bbci.co.uk/news/976/cpsprodpb/67CF/production/_108857562_mediaitem108857561.jpg");
-            Student friend2 = new Student(2, "Rye", "https://upload.wikimedia.org/wikipedia/commons/7/79/Ear_of_rye.jpg");
-            Student friend3 = new Student(3, "Jeff", "");
-            Student friend4 = new Student(4, "Helen", "https://skynursery.com/wp-content/uploads/2015/01/misc_Annas_Hummingbird_39089535924.jpg");
-            Student friend5 = new Student(5, "Eric", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/204px-Android_robot.svg.png");
+        //if (db.studentWithCoursesDao().count() < 2) {
+            //Student friend1 = new Student(1, "Elizabeth", "https://ichef.bbci.co.uk/news/976/cpsprodpb/67CF/production/_108857562_mediaitem108857561.jpg");
+//            Student friend2 = new Student(2, "Rye", "https://upload.wikimedia.org/wikipedia/commons/7/79/Ear_of_rye.jpg");
+//            Student friend3 = new Student(3, "Jeff", "");
+//            Student friend4 = new Student(4, "Helen", "https://skynursery.com/wp-content/uploads/2015/01/misc_Annas_Hummingbird_39089535924.jpg");
+//            Student friend5 = new Student(5, "Eric", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/204px-Android_robot.svg.png");
 
-            db.studentWithCoursesDao().insert(friend1);
-            db.studentWithCoursesDao().insert(friend2);
-            db.studentWithCoursesDao().insert(friend3);
-            db.studentWithCoursesDao().insert(friend4);
-            db.studentWithCoursesDao().insert(friend5);
+            //db.studentWithCoursesDao().insert(friend1);
+//            db.studentWithCoursesDao().insert(friend2);
+//            db.studentWithCoursesDao().insert(friend3);
+//            db.studentWithCoursesDao().insert(friend4);
+//            db.studentWithCoursesDao().insert(friend5);
 
-            db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
-            db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
+            //db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
+            //db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
 
-            db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
-            db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
-            db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
-        }
+//            db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
+//            db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
+//            db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
+//        }
 
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
@@ -121,9 +122,8 @@ public class HomeActivity extends AppCompatActivity {
                 for(String courseTitle : foundStudent.courses) {
                     db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                 }
-
+                studentsViewAdapter.addStudent(db.studentWithCoursesDao().getSortedOtherStudents(), HomeActivity.this);
                 Log.d(TAG, "New otherStudents size: " + db.studentWithCoursesDao().getSortedOtherStudents());
-                studentsViewAdapter.addStudent(db.studentWithCoursesDao().getSortedOtherStudents());
             }
         };
 
@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
         fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);
 
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 10, fakedMessageStudent.toByteArray());
+        this.messageListener = new FakedMessageListener(realListener, 10, this);
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(publishedMessage);
     }
