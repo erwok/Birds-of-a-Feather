@@ -149,4 +149,9 @@ public class HomeActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
         Nearby.getMessagesClient(this).unpublish(this.publishedMessage);
     }
+
+    public void onMockNearbyMessagesClicked(View view) {
+        Intent intent = new Intent(this, NearbyMessagesMockActivity.class);
+        startActivity(intent);
+    }
 }
