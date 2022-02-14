@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NearbyMessagesMockActivity extends AppCompatActivity {
+    private static final String TAG = "Mock_Nearby_Messages";
+
     private static final String[] QUARTERS = new String[] {
             "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
@@ -30,6 +33,8 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
     }
 
     public void onAddMockStudentClicked(View view) {
+        Log.d(TAG, "Add mock student button was clicked!");
+
         TextView mockStudentInfoText = findViewById(R.id.paste_info_text);
         String[] mockStudentInfoTemp = mockStudentInfoText.getText().toString().split("\n");
         List<String> mockStudentInfo = new ArrayList<String>();
@@ -77,6 +82,7 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
     }
 
     public void onMockGoBackClicked(View view) {
+        Log.d(TAG, "Mock go back to home screen button clicked");
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
     }

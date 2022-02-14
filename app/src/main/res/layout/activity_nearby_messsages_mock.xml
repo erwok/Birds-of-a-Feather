@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
         android:onClick="onAddMockStudentClicked"
-        android:text="Add Mock Student"
+        android:text="Enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

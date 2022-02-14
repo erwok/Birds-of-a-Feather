@@ -57,6 +57,14 @@ public class AddCourseActivity extends AppCompatActivity {
                 throw new Exception();
             }
 
+            if (subject.equals("")) {
+                throw new Exception();
+            }
+
+            if (courseNum.equals("")) {
+                throw new Exception();
+            }
+
             Course newCourse = new Course(HomeActivity.USER_ID, year, quarter, subject, courseNum);
 
             AppDatabase.singleton(this).coursesDao().insert(newCourse);
