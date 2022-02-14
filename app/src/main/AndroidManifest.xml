@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
+            android:name=".NearbyMessagesMockActivity"
+            android:exported="false" />
+        <activity
             android:name=".HeadshotActivity"
             android:exported="false" />
         <activity
