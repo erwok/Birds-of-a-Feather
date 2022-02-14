@@ -24,11 +24,13 @@ import com.example.birdsofafeather.model.db.AppDatabase;
 
 @RunWith(AndroidJUnit4.class)
 public class NearbyMessagesMockTest {
-    ActivityScenario<NearbyMessagesMockActivity> scenario;
     AppDatabase db;
+    ActivityScenario<NearbyMessagesMockActivity> scenario;
 
     @Before
-    public void setUpApp() {
+    public void init() {
+        AppDatabase.useTestSingleton(getApplicationContext());
+        db = AppDatabase.singleton(getApplicationContext());
         scenario = ActivityScenario.launch(NearbyMessagesMockActivity.class);
     }
 
@@ -41,7 +43,6 @@ public class NearbyMessagesMockTest {
     @Test
     public void testAddMockStudentToDatabase() {
         scenario.onActivity(activity -> {
-            db = AppDatabase.singleton(getApplicationContext());
             TextView pastedInfo = activity.findViewById(R.id.paste_info_text);
             pastedInfo.setText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOS" +
                     "MOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76" +
