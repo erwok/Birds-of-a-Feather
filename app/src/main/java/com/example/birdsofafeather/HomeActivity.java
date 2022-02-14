@@ -69,6 +69,13 @@ public class HomeActivity extends AppCompatActivity {
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
 
+        if (user == null) {
+            Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "");
+            defaultUser.isUser = true;
+            db.studentWithCoursesDao().insert(defaultUser);
+            user = db.studentWithCoursesDao().getUser();
+        }
+
         Log.d(TAG, "User name: " + user.getName());
         Log.d(TAG, "User URL: " + user.getPhotoURL());
         for (String course : user.courses) {
@@ -93,11 +100,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onAddCoursesClicked(View view) {
+        Log.d(TAG, "Add courses button was clicked!");
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
     }
 
     public void onStartClicked(View view) {
+        Log.d(TAG, "Start search button was clicked!");
         Button start = findViewById(R.id.start_btn);
         start.setVisibility(View.GONE);
 
@@ -139,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onStopClicked(View view) {
+        Log.d(TAG, "Stop button was clicked!");
         Button start = findViewById(R.id.start_btn);
         start.setVisibility(View.VISIBLE);
 
@@ -151,6 +161,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onMockNearbyMessagesClicked(View view) {
+        Log.d(TAG, "Mock button was clicked!");
         Intent intent = new Intent(this, NearbyMessagesMockActivity.class);
         startActivity(intent);
     }

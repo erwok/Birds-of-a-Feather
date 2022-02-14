@@ -25,11 +25,12 @@ public abstract class AppDatabase extends RoomDatabase {
     /**
      * Sets the singleton to be a test database, with nothing in it.
      */
-    public static void useTestSingleton(Context context) {
+    public static AppDatabase useTestSingleton(Context context) {
         singletonInstance = Room.inMemoryDatabaseBuilder(context, AppDatabase.class)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
+        return singletonInstance;
     }
 
     public abstract StudentWithCoursesDao studentWithCoursesDao();

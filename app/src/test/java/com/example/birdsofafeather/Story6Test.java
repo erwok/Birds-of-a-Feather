@@ -30,6 +30,12 @@ public class Story6Test {
         scenario = ActivityScenario.launch(AddCourseActivity.class);
     }
 
+    @After
+    public void tearDown() {
+        db.close();
+        scenario.close();
+    }
+
     @Test
     public void testNoAddedCourses() {
         assertEquals(db.coursesDao().count(), 0);
