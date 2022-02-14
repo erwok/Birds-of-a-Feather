@@ -33,6 +33,7 @@ public class Story6Test {
     @After
     public void tearDown() {
         db.close();
+        scenario.close();
     }
 
     @Test

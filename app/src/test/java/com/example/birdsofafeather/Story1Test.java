@@ -1,12 +1,17 @@
 package com.example.birdsofafeather;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.TextView;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Shadows;
@@ -24,11 +29,20 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class Story1Test {
+    AppDatabase db;
     ActivityScenario<HomeActivity> scenario;
 
     @Before
-    public void setUpApp() {
+    public void init() {
+        AppDatabase.useTestSingleton(getApplicationContext());
+        db = AppDatabase.singleton(getApplicationContext());
         scenario = ActivityScenario.launch(HomeActivity.class);
+    }
+
+    @After
+    public void tearDown() {
+        db.close();
+        scenario.close();
     }
 
     /**
@@ -37,12 +51,10 @@ public class Story1Test {
      * courses after adding a specific number of students and courses.
      */
     @Test
-    public void testDatabase(){
+    public void testDatabase() {
         scenario.onActivity(activity ->{
-            AppDatabase db = AppDatabase.useTestSingleton(activity.getApplicationContext());
-
-            // There should be 0 students in the database before any are added
-            assertEquals(0, db.studentWithCoursesDao().count());
+            // There should be 1 student (user) in the database before any are added
+            assertEquals(1, db.studentWithCoursesDao().count());
 
             // There should be 0 courses in the database before any are added
             assertEquals(0, db.coursesDao().count());
@@ -61,8 +73,8 @@ public class Story1Test {
             db.coursesDao().insert(ericCourse1);
             db.coursesDao().insert(ericCourse2);
 
-            // There should be 2 students now that Jeff and Eric have been added
-            assertEquals(2, db.studentWithCoursesDao().count());
+            // There should be 3 students now that Jeff and Eric have been added
+            assertEquals(3, db.studentWithCoursesDao().count());
 
             // There should be 3 notes now that notes have been added
             assertEquals(3, db.coursesDao().count());
@@ -98,7 +110,7 @@ public class Story1Test {
     @Test
     public void testStartAndStopCorrectDatabaseItems() {
         scenario.onActivity(activity -> {
-            AppDatabase db = AppDatabase.useTestSingleton(activity.getApplicationContext());
+            //db = AppDatabase.singleton(activity.getApplicationContext());
 
             Student student1 = new Student(1, "Jeff", "google.jpg");
             db.studentWithCoursesDao().insert(student1);
@@ -116,8 +128,4 @@ public class Story1Test {
             assertEquals(-1, db.studentWithCoursesDao().get(1).getCommonCourseCount());
         });
     }
-
-
-
-
 }
