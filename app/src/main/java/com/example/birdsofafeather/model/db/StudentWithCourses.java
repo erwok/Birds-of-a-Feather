@@ -35,6 +35,8 @@ public class StudentWithCourses {
         return this.student.commonCourses;
     }
 
+    public boolean getFavorite() { return this.student.favorite; }
+
     public List<String> getClasses() { return this.courses; }
 
 

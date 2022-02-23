@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,9 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
@@ -70,6 +73,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final TextView studentNameView;
         private final ImageView studentPfpView;
         private final TextView matchedCoursesView;
+        private final CheckBox favoriteCheckbox;
 
         private StudentWithCourses student;
 
@@ -78,6 +82,15 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             this.studentNameView = itemView.findViewById(R.id.stud_name_textview);
             this.studentPfpView = itemView.findViewById(R.id.stud_pfp_imageview);
             this.matchedCoursesView = itemView.findViewById(R.id.course_name_textview);
+            this.favoriteCheckbox = itemView.findViewById(R.id.favorite_checkbox);
+            this.favoriteCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    AppDatabase.singleton(studentNameView.getContext())
+                            .studentWithCoursesDao().favoriteStudent(student.getId(), isChecked);
+                }
+            });
+
             itemView.setOnClickListener(this);
         }
 
@@ -90,6 +103,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
                     .load(student.getPhotoURL())
                     .fitCenter()
                     .into(studentPfpView);
+            this.favoriteCheckbox.setChecked(student.getFavorite());
         }
 
         @Override

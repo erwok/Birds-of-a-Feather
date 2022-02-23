@@ -165,4 +165,10 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NearbyMessagesMockActivity.class);
         startActivity(intent);
     }
+
+    public void onViewFavoritesClicked(View view) {
+        Log.d(TAG, "View favorites button was clicked!");
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+    }
 }

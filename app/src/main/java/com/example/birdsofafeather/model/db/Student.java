@@ -27,6 +27,9 @@ public class Student {
     @ColumnInfo(name = "is_user", defaultValue = "FALSE")
     public boolean isUser = false;
 
+    @ColumnInfo(name = "favorite", defaultValue = "FALSE")
+    public boolean favorite = false;
+
     public Student(int studentId, String name, String photoURL) {
         this.studentId = studentId;
         this.name = name;

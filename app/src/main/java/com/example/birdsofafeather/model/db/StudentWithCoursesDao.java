@@ -25,6 +25,13 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE NOT is_user ORDER BY common_courses DESC")
     List<StudentWithCourses> getSortedOtherStudents();
 
+    /**
+     * @return A list of all non-user students, that have been favorited
+     */
+    @Transaction
+    @Query("SELECT * FROM students WHERE favorite")
+    List<StudentWithCourses> getFavoritedStudents();
+
     @Query("SELECT * FROM students WHERE id=:id")
     StudentWithCourses get(int id);
 
@@ -33,6 +40,10 @@ public interface StudentWithCoursesDao {
 
     @Insert
     void insert(Student student);
+
+    @Transaction
+    @Query("UPDATE students SET favorite=:favorite WHERE id=:id")
+    void favoriteStudent(int id, boolean favorite);
 
     /**
      * Reset the stored number of courses shared with the user for all saved students. Useful when
