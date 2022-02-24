@@ -20,6 +20,7 @@
     <string name="url_hint">URL</string>
     <string name="submit">Submit</string>
     <string name="url_ending_restriction">.jpg or .png only</string>
-
+    <string name="view_favorites">View Favorites</string>
+    <string name="favorites">Favorites</string>
 
 </resources>
