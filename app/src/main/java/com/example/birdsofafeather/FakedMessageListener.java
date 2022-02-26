@@ -41,7 +41,9 @@ public class FakedMessageListener extends MessageListener{
 
                 System.out.println(course);
                 fakedMessageStudent.student = new Student(0, name, photoURL);
-                fakedMessageStudent.courses.add(new Course(0, Integer.parseInt(course_parts[0]), course_parts[1], course_parts[2], course_parts[3]).courseTitle);
+                fakedMessageStudent.courses.add(new Course(0, Integer.parseInt(
+                        course_parts[0]), course_parts[1], course_parts[2], course_parts[3],
+                        Integer.parseInt(course_parts[4])).courseTitle);
             }
             catch (IOException e) {
                 e.printStackTrace();

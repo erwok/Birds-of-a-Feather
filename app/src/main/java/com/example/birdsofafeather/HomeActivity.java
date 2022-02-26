@@ -148,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
                     return;
                 }
                 foundStudent.calculateSharedCourseCount(user);
+                foundStudent.calculateThisQuarterScore(user);
                 db.studentWithCoursesDao().insert(foundStudent.student);
                 for(String courseTitle : foundStudent.courses) {
                     db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
@@ -162,7 +163,8 @@ public class HomeActivity extends AppCompatActivity {
         // Build a fake student
         StudentWithCourses fakedMessageStudent = new StudentWithCourses();
         fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
-        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);
+        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
+                .courseTitle);
 
         //eventually not faked
         this.messageListener = new FakedMessageListener(realListener, 10, this);

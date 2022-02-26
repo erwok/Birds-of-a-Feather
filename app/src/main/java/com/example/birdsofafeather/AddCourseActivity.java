@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,7 @@ import com.example.birdsofafeather.model.db.Course;
 import java.util.Arrays;
 
 public class AddCourseActivity extends AppCompatActivity {
-
+    protected Spinner classSizeSpinner;
     private static final String[] QUARTERS = new String[] {
             "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
@@ -30,6 +31,13 @@ public class AddCourseActivity extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, QUARTERS);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.editQuarterTextView);
         textView.setAdapter(adapter);
+
+        classSizeSpinner = findViewById(R.id.class_size_spinner);
+        ArrayAdapter<CharSequence> classSizeAdapter = ArrayAdapter.createFromResource(this,
+                R.array.class_size_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        classSizeSpinner.setAdapter(classSizeAdapter);
+        classSizeSpinner.setSelection(5);
     }
 
     public void onAddButtonClicked(View view) {
@@ -65,7 +73,8 @@ public class AddCourseActivity extends AppCompatActivity {
                 throw new Exception();
             }
 
-            Course newCourse = new Course(HomeActivity.USER_ID, year, quarter, subject, courseNum);
+            Course newCourse = new Course(HomeActivity.USER_ID, year, quarter, subject, courseNum,
+                    classSizeSpinner.getSelectedItemPosition());
 
             AppDatabase.singleton(this).coursesDao().insert(newCourse);
             // We've added a new shared course, so invalidate all previous shared course counts.
