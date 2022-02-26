@@ -20,7 +20,7 @@ public class StudentSorter {
         this.db = db;
     }
 
-    protected int calculateSizeScore(StudentWithCourses swc) {
+    public int calculateSizeScore(StudentWithCourses swc) {
         int sizeScore = 0;
         for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
             sizeScore += classSizeWeight[db.coursesDao().getCourseSizeForCourse(
@@ -29,7 +29,7 @@ public class StudentSorter {
         return sizeScore;
     }
 
-    protected int calculateRecencyScore(StudentWithCourses swc) {
+    public int calculateRecencyScore(StudentWithCourses swc) {
         int recencyScore = 0;
         for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
             String[] courseInfo = course.split(" ");
@@ -38,7 +38,11 @@ public class StudentSorter {
             if(year == 2022) {
                 recencyScore += 5;
             } else if(year == 2021) {
-                recencyScore += 5 - quarters.indexOf(quarter);
+                int toSub = quarters.indexOf(quarter);
+                if(toSub == -1) {
+                    toSub = 1;
+                }
+                recencyScore += 5 - toSub;
             } else {
                 recencyScore += 1;
             }
@@ -50,7 +54,7 @@ public class StudentSorter {
         return swc.overlappingClasses(db.studentWithCoursesDao().getUser()).size();
     }
 
-    protected int calculateThisQuarterScore(StudentWithCourses swc) {
+    public int calculateThisQuarterScore(StudentWithCourses swc) {
         int thisQScore = 0;
         for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
             if(course.startsWith("2022 WI")) {

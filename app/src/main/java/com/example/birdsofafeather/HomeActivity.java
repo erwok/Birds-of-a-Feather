@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
     private AppDatabase db;
 
     protected Spinner prioritySpinner;
-    protected StudentSorter studentSorter;
+    public StudentSorter studentSorter;
 
     protected StudentWithCourses user;
     private boolean first = true;
@@ -99,9 +99,6 @@ public class HomeActivity extends AppCompatActivity {
                 R.array.priority_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(adapter);
-        prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
-        prioritySpinner.setSelection(0);
-
         matchedStudentsView = findViewById(R.id.matched_students_view);
         studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
@@ -109,6 +106,9 @@ public class HomeActivity extends AppCompatActivity {
         studentsViewAdapter = new StudentsViewAdapter(studentSorter.getSortedStudents(
                 prioritySpinner.getSelectedItemPosition()));
         matchedStudentsView.setAdapter(studentsViewAdapter);
+
+        prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
+        prioritySpinner.setSelection(0);
     }
 
     public void onAddCoursesClicked(View view) {

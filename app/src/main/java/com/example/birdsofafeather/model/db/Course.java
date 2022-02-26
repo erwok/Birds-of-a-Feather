@@ -33,6 +33,16 @@ public class Course {
     @ColumnInfo(name = "course_size", defaultValue = "5")
     public int courseSize;
 
+    @Ignore
+    public Course(int studentId, int year, String quarter, String subject, String courseNum) {
+        this.studentId = studentId;
+        this.year = year;
+        this.quarter = quarter;
+        this.subject = subject;
+        this.courseNum = courseNum;
+        this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum;
+    }
+
     public Course(int studentId, int year, String quarter, String subject, String courseNum,
                   int courseSize) {
         this.studentId = studentId;
