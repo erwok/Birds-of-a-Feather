@@ -1,5 +1,7 @@
 package com.example.birdsofafeather.model.db;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StudentSorter {
@@ -10,6 +12,7 @@ public class StudentSorter {
     private final int WAVED_AT = 4;
 
     private final int[] classSizeWeight = new int[] {100, 33, 18, 10, 6, 3};
+    private final List<String> quarters = new ArrayList<>(Arrays.asList("FA", null, "SP", "WI"));
 
     private AppDatabase db;
 
@@ -17,24 +20,71 @@ public class StudentSorter {
         this.db = db;
     }
 
+    protected int calculateSizeScore(StudentWithCourses swc) {
+        int sizeScore = 0;
+        for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
+            sizeScore += classSizeWeight[db.coursesDao().getCourseSizeForCourse(
+                    swc.getId(), course)];
+        }
+        return sizeScore;
+    }
+
+    protected int calculateRecencyScore(StudentWithCourses swc) {
+        int recencyScore = 0;
+        for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
+            String[] courseInfo = course.split(" ");
+            int year = Integer.parseInt(courseInfo[0]);
+            String quarter = courseInfo[1];
+            if(year == 2022) {
+                recencyScore += 5;
+            } else if(year == 2021) {
+                recencyScore += 5 - quarters.indexOf(quarter);
+            } else {
+                recencyScore += 1;
+            }
+        }
+        return recencyScore;
+    }
+
+    public int calculateSharedCourseCount(StudentWithCourses swc) {
+        return swc.overlappingClasses(db.studentWithCoursesDao().getUser()).size();
+    }
+
+    protected int calculateThisQuarterScore(StudentWithCourses swc) {
+        int thisQScore = 0;
+        for(String course : swc.overlappingClasses(db.studentWithCoursesDao().getUser())) {
+            if(course.startsWith("2022 WI")) {
+                thisQScore++;
+            }
+        }
+        return thisQScore;
+    }
+
     public List<StudentWithCourses> getSortedStudents(int sortType) {
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
         switch(sortType) {
             case THIS_Q:
+                for(StudentWithCourses swc : students) {
+                    swc.student.thisQuarterScore = calculateThisQuarterScore(swc);
+                }
                 return db.studentWithCoursesDao().getSortedOtherStudentsByThisQuarter();
             case CLASS_SIZE:
-                List<StudentWithCourses> students = db.studentWithCoursesDao()
-                        .getSortedOtherStudentsByThisQuarter();
                 for(StudentWithCourses swc : students) {
-                    int score = 0;
-                    for(String course : swc.courses) {
-                        score += classSizeWeight[db.coursesDao().getCourseSizeForCourse(
-                                swc.getId(), course)];
-                    }
-                    swc.student.sizeScore = score;
+                    swc.student.sizeScore = calculateSizeScore(swc);
                     db.studentWithCoursesDao().updateStudent(swc.student);
                 }
                 return db.studentWithCoursesDao().getSortedOtherStudentsByCourseSize();
+            case RECENCY:
+                for(StudentWithCourses swc : students) {
+                    swc.student.recencyScore = calculateRecencyScore(swc);
+                    db.studentWithCoursesDao().updateStudent(swc.student);
+                }
+                return db.studentWithCoursesDao().getSortedOtherStudentsByRecency();
             default:
+                for(StudentWithCourses swc : students) {
+                    swc.student.commonCourses = calculateSharedCourseCount(swc);
+                    db.studentWithCoursesDao().updateStudent(swc.student);
+                }
                 return db.studentWithCoursesDao().getSortedOtherStudents();
         }
     }

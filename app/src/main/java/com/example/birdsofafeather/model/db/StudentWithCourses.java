@@ -130,27 +130,4 @@ public class StudentWithCourses {
         }
         return sharedClassTitles;
     }
-
-    /**
-     * Count how many courses this student shares with the user, and set that as this student's
-     * commonCourses.
-     * @param user The StudentWithCourses representing the user of this app
-     */
-    public void calculateSharedCourseCount(StudentWithCourses user) {
-        student.commonCourses = overlappingClasses(user).size();
-    }
-
-    public void calculateRecencyScore(StudentWithCourses user) {
-        int commCoursesThisQuarter = 0;
-        for(String course : overlappingClasses(user)) {
-            if(course.startsWith("2022 WI")) {
-                commCoursesThisQuarter ++;
-            }
-        }
-        student.thisQuarterScore = commCoursesThisQuarter;
-    }
-
-    public void calculateThisQuarterScore(StudentWithCourses user) {
-
-    }
 }

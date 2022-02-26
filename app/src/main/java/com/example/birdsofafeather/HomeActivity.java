@@ -102,15 +102,6 @@ public class HomeActivity extends AppCompatActivity {
         prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
         prioritySpinner.setSelection(0);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
-
-        // Calculate number of shared courses
-        for (StudentWithCourses student : students) {
-            student.calculateSharedCourseCount(user);
-            student.calculateThisQuarterScore(user);
-            db.studentWithCoursesDao().updateStudent(student.student);
-        }
-
         matchedStudentsView = findViewById(R.id.matched_students_view);
         studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
@@ -147,8 +138,6 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
                     return;
                 }
-                foundStudent.calculateSharedCourseCount(user);
-                foundStudent.calculateThisQuarterScore(user);
                 db.studentWithCoursesDao().insert(foundStudent.student);
                 for(String courseTitle : foundStudent.courses) {
                     db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
