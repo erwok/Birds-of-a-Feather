@@ -14,6 +14,10 @@ public interface CoursesDao {
     List<Course> getForStudent(int studentId);
 
     @Transaction
+    @Query("SELECT course_size FROM courses WHERE student_id=:studentId AND course_title=:courseTitle")
+    int getCourseSizeForCourse(int studentId, String courseTitle);
+
+    @Transaction
     @Query("SELECT * FROM courses")
     List<Course> getCourses();
 

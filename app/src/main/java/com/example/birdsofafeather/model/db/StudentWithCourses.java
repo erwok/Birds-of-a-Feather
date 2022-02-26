@@ -150,10 +150,6 @@ public class StudentWithCourses {
         student.thisQuarterScore = commCoursesThisQuarter;
     }
 
-    public void calculateSizeScore(StudentWithCourses user) {
-
-    }
-
     public void calculateThisQuarterScore(StudentWithCourses user) {
 
     }
