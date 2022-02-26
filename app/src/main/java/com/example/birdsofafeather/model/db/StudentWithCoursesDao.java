@@ -25,6 +25,10 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE NOT is_user ORDER BY common_courses DESC")
     List<StudentWithCourses> getSortedOtherStudents();
 
+    @Transaction
+    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY this_quarter_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByThisQuarter();
+
     /**
      * @return A list of all non-user students, that have been favorited
      */

@@ -139,4 +139,22 @@ public class StudentWithCourses {
     public void calculateSharedCourseCount(StudentWithCourses user) {
         student.commonCourses = overlappingClasses(user).size();
     }
+
+    public void calculateRecencyScore(StudentWithCourses user) {
+        int commCoursesThisQuarter = 0;
+        for(String course : overlappingClasses(user)) {
+            if(course.startsWith("2022 WI")) {
+                commCoursesThisQuarter ++;
+            }
+        }
+        student.thisQuarterScore = commCoursesThisQuarter;
+    }
+
+    public void calculateSizeScore(StudentWithCourses user) {
+
+    }
+
+    public void calculateThisQuarterScore(StudentWithCourses user) {
+
+    }
 }

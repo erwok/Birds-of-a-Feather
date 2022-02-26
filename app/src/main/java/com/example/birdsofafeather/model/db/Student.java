@@ -24,6 +24,18 @@ public class Student {
     @ColumnInfo(name = "common_courses", defaultValue = "-1")
     public int commonCourses = -1;
 
+    @ColumnInfo(name = "recency_score", defaultValue = "-1")
+    public int recencyScore = -1;
+
+    @ColumnInfo(name = "size_score", defaultValue = "-1")
+    public int sizeScore = -1;
+
+    @ColumnInfo(name = "this_quarter_score", defaultValue = "-1")
+    public int thisQuarterScore = -1;
+
+    @ColumnInfo(name = "wave_to_me", defaultValue = "FALSE")
+    public boolean waveToMe = false;
+
     @ColumnInfo(name = "is_user", defaultValue = "FALSE")
     public boolean isUser = false;
 
