@@ -24,6 +24,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentSorter;
 
 import java.util.List;
 
@@ -65,9 +66,9 @@ public class Story1Test {
             db.studentWithCoursesDao().insert(student1);
             db.studentWithCoursesDao().insert(student2);
 
-            Course jeffCourse = new Course(1, 2022, "WI", "CSE", "110");
-            Course ericCourse1 = new Course(2, 2022, "WI", "CSE", "110");
-            Course ericCourse2 = new Course(2, 2021, "FA", "CSE", "105");
+            Course jeffCourse = new Course(1, 2022, "WI", "CSE", "110", 0);
+            Course ericCourse1 = new Course(2, 2022, "WI", "CSE", "110", 0);
+            Course ericCourse2 = new Course(2, 2021, "FA", "CSE", "105", 0);
 
             db.coursesDao().insert(jeffCourse);
             db.coursesDao().insert(ericCourse1);

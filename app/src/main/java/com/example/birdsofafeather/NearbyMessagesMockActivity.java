@@ -58,12 +58,13 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
                 String quarter = courseInfo[1];
                 String subject = courseInfo[2];
                 String courseNum = courseInfo[3];
+                int size = Integer.parseInt(courseInfo[4]);
 
                 if(!Arrays.asList(QUARTERS).contains(quarter)) {
                     throw new Exception();
                 }
 
-                Course newCourse = new Course(mockStudentId, year, quarter, subject, courseNum);
+                Course newCourse = new Course(mockStudentId, year, quarter, subject, courseNum, size);
 
                 AppDatabase.singleton(this).coursesDao().insert(newCourse);
                 // We've added a new shared course, so invalidate all previous shared course counts.

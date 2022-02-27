@@ -130,13 +130,4 @@ public class StudentWithCourses {
         }
         return sharedClassTitles;
     }
-
-    /**
-     * Count how many courses this student shares with the user, and set that as this student's
-     * commonCourses.
-     * @param user The StudentWithCourses representing the user of this app
-     */
-    public void calculateSharedCourseCount(StudentWithCourses user) {
-        student.commonCourses = overlappingClasses(user).size();
-    }
 }

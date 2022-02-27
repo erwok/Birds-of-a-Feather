@@ -30,12 +30,27 @@ public class Course {
     @ColumnInfo(name = "course_title")
     public String courseTitle;
 
+    @ColumnInfo(name = "course_size", defaultValue = "5")
+    public int courseSize;
+
+    @Ignore
     public Course(int studentId, int year, String quarter, String subject, String courseNum) {
         this.studentId = studentId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;
         this.courseNum = courseNum;
+        this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum;
+    }
+
+    public Course(int studentId, int year, String quarter, String subject, String courseNum,
+                  int courseSize) {
+        this.studentId = studentId;
+        this.year = year;
+        this.quarter = quarter;
+        this.subject = subject;
+        this.courseNum = courseNum;
+        this.courseSize = courseSize;
         this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum;
     }
 
@@ -46,12 +61,13 @@ public class Course {
      */
     @Ignore // So room doesn't get confused and try to use this constructor
     public Course(String courseTitle, int studentId) {
-        this.courseTitle = courseTitle;
         String[] splitTitle = this.courseTitle.split(" ");
         this.studentId = studentId;
         this.year = Integer.parseInt(splitTitle[0]);
         this.quarter = splitTitle[1];
         this.subject = splitTitle[2];
         this.courseNum = splitTitle[3];
+        this.courseTitle = "" + this.year + " " + this.quarter + " " + this.subject + " " + this.courseNum;
+        this.courseSize = Integer.parseInt(splitTitle[4]);
     }
 }

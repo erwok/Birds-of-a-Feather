@@ -1,11 +1,15 @@
 package com.example.birdsofafeather;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentSorter;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -33,6 +38,9 @@ public class HomeActivity extends AppCompatActivity {
     private MessageListener messageListener;
     private AppDatabase db;
 
+    protected Spinner prioritySpinner;
+    public StudentSorter studentSorter;
+
     protected StudentWithCourses user;
     private boolean first = true;
 
@@ -43,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         db = AppDatabase.singleton(getApplicationContext());
+        studentSorter = new StudentSorter(db);
 
         //FOR TESTING STORY 8
         //if (db.studentWithCoursesDao().count() < 2) {
@@ -82,21 +91,24 @@ public class HomeActivity extends AppCompatActivity {
             Log.d(TAG, "User course: " + course);
         }
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(); // May not be sorted yet, we do that later
+        // May not be sorted yet, we do that later
         this.publishedMessage = new Message(user.toByteArray());
 
-        // Calculate number of shared courses
-        for (StudentWithCourses student : students) {
-            student.calculateSharedCourseCount(user);
-            db.studentWithCoursesDao().updateStudent(student.student);
-        }
-
+        prioritySpinner = findViewById(R.id.priority_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.priority_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        prioritySpinner.setAdapter(adapter);
         matchedStudentsView = findViewById(R.id.matched_students_view);
         studentsLayoutManager = new LinearLayoutManager(getApplicationContext());
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
-        studentsViewAdapter = new StudentsViewAdapter(db.studentWithCoursesDao().getSortedOtherStudents());
+        studentsViewAdapter = new StudentsViewAdapter(studentSorter.getSortedStudents(
+                prioritySpinner.getSelectedItemPosition()));
         matchedStudentsView.setAdapter(studentsViewAdapter);
+
+        prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
+        prioritySpinner.setSelection(0);
     }
 
     public void onAddCoursesClicked(View view) {
@@ -126,20 +138,22 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
                     return;
                 }
-                foundStudent.calculateSharedCourseCount(user);
                 db.studentWithCoursesDao().insert(foundStudent.student);
                 for(String courseTitle : foundStudent.courses) {
                     db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                 }
-                studentsViewAdapter.addStudent(db.studentWithCoursesDao().getSortedOtherStudents(), HomeActivity.this);
-                Log.d(TAG, "New otherStudents size: " + db.studentWithCoursesDao().getSortedOtherStudents());
+                studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
+                        prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+                Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
+                        prioritySpinner.getSelectedItemPosition()));
             }
         };
 
         // Build a fake student
         StudentWithCourses fakedMessageStudent = new StudentWithCourses();
         fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
-        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110").courseTitle);
+        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
+                .courseTitle);
 
         //eventually not faked
         this.messageListener = new FakedMessageListener(realListener, 10, this);
@@ -170,5 +184,17 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "View favorites button was clicked!");
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
+    }
+
+    public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
+                    prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            //do nothing, something should always be selected
+            //must be implemented due to interface
+        }
     }
 }

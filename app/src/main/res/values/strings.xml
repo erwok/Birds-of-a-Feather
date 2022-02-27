@@ -9,6 +9,7 @@
     <string name="quarter_label">Quarter :</string>
     <string name="subject_label">Subject :</string>
     <string name="course_num_label">Course# :</string>
+    <string name="course_size_label">Course Size :</string>
     <string name="year_example">E.g. 2021</string>
     <string name="quarter_example">E.g. FA</string>
     <string name="subject_example">E.g. CSE</string>
@@ -22,5 +23,20 @@
     <string name="url_ending_restriction">.jpg or .png only</string>
     <string name="view_favorites">View Favorites</string>
     <string name="favorites">Favorites</string>
-
+    <string name="prioritize_label">Prioritize by:</string>
+    <string-array name="priority_array">
+        <item>Common Courses</item>
+        <item>This Quarter</item>
+        <item>Class Size</item>
+        <item>Recent Classes</item>
+        <item>Waved At By</item>
+    </string-array>
+    <string-array name="class_size_array">
+        <item>Tiny (below 40)</item>
+        <item>Small (40-75)</item>
+        <item>Medium (75-150)</item>
+        <item>Large (150-250)</item>
+        <item>Huge (250-400)</item>
+        <item>Gigantic (400+)</item>
+    </string-array>
 </resources>
