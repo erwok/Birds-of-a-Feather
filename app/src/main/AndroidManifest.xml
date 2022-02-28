@@ -15,6 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
+            android:name=".click_session"
+            android:exported="false" />
+        <activity
+            android:name=".sessions_page"
+            android:exported="false" />
+        <activity
+            android:name=".activity_switch_sessions"
+            android:exported="false" />
+        <activity
             android:name=".FavoritesActivity"
             android:exported="false" />
         <activity
