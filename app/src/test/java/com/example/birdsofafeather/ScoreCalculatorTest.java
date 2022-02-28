@@ -51,6 +51,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(userCourse2);
 
         Student other = new Student(1, "Other Student", "");
+        other.sessionID = 0;
         db.studentWithCoursesDao().insert(other);
 
         Course otherCourse1 = new Course(1, 2021, "WI", "CSE",
@@ -60,7 +61,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(otherCourse1);
         db.coursesDao().insert(otherCourse2);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(0);
         StudentWithCourses stud = students.get(0);
 
         assertEquals(0, sorter.calculateSharedCourseCount(stud));
@@ -82,6 +83,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc2);
 
         Student s1 = new Student(1, "Student 1", "");
+        s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course s1c1 = new Course(1, 2022, "WI", "CSE",
                 "110", 3);
@@ -93,7 +95,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(s1c2);
         db.coursesDao().insert(s1c3);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(0);
         StudentWithCourses stud1 = students.get(0);
 
         assertEquals(2, sorter.calculateSharedCourseCount(stud1));
@@ -115,6 +117,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc3);
 
         Student s1 = new Student(1, "Student 1", "");
+        s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 3);
@@ -126,7 +129,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(sc2);
         db.coursesDao().insert(sc3);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(0);
         StudentWithCourses stud1 = students.get(0);
 
         assertEquals(2, sorter.calculateThisQuarterScore(stud1));
@@ -157,6 +160,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc6);
 
         Student s1 = new Student(1, "Student 1", "");
+        s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 0);
@@ -180,7 +184,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(sc6);
         db.coursesDao().insert(sc7);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(0);
         StudentWithCourses stud1 = students.get(0);
 
         assertEquals(170, sorter.calculateSizeScore(stud1));
@@ -211,6 +215,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc6);
 
         Student s1 = new Student(1, "Student 1", "");
+        s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 0);
@@ -231,7 +236,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(sc5);
         db.coursesDao().insert(sc6);
 
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(0);
         StudentWithCourses stud1 = students.get(0);
 
         assertEquals(5 + 5 + 4 + 3 + 2 + 1, sorter.calculateRecencyScore(stud1));

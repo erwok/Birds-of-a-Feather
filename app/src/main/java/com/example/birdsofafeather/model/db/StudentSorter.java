@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StudentSorter {
-    private final int COMM_COURSE = 0;
-    private final int THIS_Q = 1;
-    private final int CLASS_SIZE = 2;
-    private final int RECENCY = 3;
-    private final int WAVED_AT = 4;
+    private final static int COMM_COURSE = 0;
+    private final static int THIS_Q = 1;
+    private final static int CLASS_SIZE = 2;
+    private final static int RECENCY = 3;
+    private final static int WAVED_AT = 4;
 
     private final int[] classSizeWeight = new int[] {100, 33, 18, 10, 6, 3};
     private final List<String> quarters = new ArrayList<>(Arrays.asList("FA", null, "SP", "WI"));
@@ -64,32 +64,32 @@ public class StudentSorter {
         return thisQScore;
     }
 
-    public List<StudentWithCourses> getSortedStudents(int sortType) {
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents();
+    public List<StudentWithCourses> getSortedStudents(int sortType, int sessionID) {
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getSortedOtherStudents(sessionID);
         switch(sortType) {
             case THIS_Q:
                 for(StudentWithCourses swc : students) {
                     swc.student.thisQuarterScore = calculateThisQuarterScore(swc);
                 }
-                return db.studentWithCoursesDao().getSortedOtherStudentsByThisQuarter();
+                return db.studentWithCoursesDao().getSortedOtherStudentsByThisQuarter(sessionID);
             case CLASS_SIZE:
                 for(StudentWithCourses swc : students) {
                     swc.student.sizeScore = calculateSizeScore(swc);
                     db.studentWithCoursesDao().updateStudent(swc.student);
                 }
-                return db.studentWithCoursesDao().getSortedOtherStudentsByCourseSize();
+                return db.studentWithCoursesDao().getSortedOtherStudentsByCourseSize(sessionID);
             case RECENCY:
                 for(StudentWithCourses swc : students) {
                     swc.student.recencyScore = calculateRecencyScore(swc);
                     db.studentWithCoursesDao().updateStudent(swc.student);
                 }
-                return db.studentWithCoursesDao().getSortedOtherStudentsByRecency();
+                return db.studentWithCoursesDao().getSortedOtherStudentsByRecency(sessionID);
             default:
                 for(StudentWithCourses swc : students) {
                     swc.student.commonCourses = calculateSharedCourseCount(swc);
                     db.studentWithCoursesDao().updateStudent(swc.student);
                 }
-                return db.studentWithCoursesDao().getSortedOtherStudents();
+                return db.studentWithCoursesDao().getSortedOtherStudents(sessionID);
         }
     }
 }
