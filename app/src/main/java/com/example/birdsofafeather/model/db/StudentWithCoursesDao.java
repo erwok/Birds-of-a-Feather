@@ -22,20 +22,20 @@ public interface StudentWithCoursesDao {
      * in descending order.
      */
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY common_courses DESC")
-    List<StudentWithCourses> getSortedOtherStudents();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY common_courses DESC")
+    List<StudentWithCourses> getSortedOtherStudents(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY this_quarter_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByThisQuarter();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY this_quarter_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByThisQuarter(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY size_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByCourseSize();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY size_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByCourseSize(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY recency_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByRecency();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY recency_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByRecency(int sessionID);
 
     /**
      * @return A list of all non-user students, that have been favorited

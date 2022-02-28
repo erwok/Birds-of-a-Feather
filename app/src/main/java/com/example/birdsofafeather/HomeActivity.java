@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentSorter;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     public StudentSorter studentSorter;
 
     protected StudentWithCourses user;
+    protected Session activeSession;
     private boolean first = true;
 
     @SuppressLint("WrongThread")
@@ -77,6 +79,10 @@ public class HomeActivity extends AppCompatActivity {
 
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
+        activeSession = db.sessionDao().getLast();
+        if (activeSession == null) {
+            activeSession = new Session();
+        }
 
         if (user == null) {
             Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "");
@@ -104,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
         studentsViewAdapter = new StudentsViewAdapter(studentSorter.getSortedStudents(
-                prioritySpinner.getSelectedItemPosition()));
+                prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
         matchedStudentsView.setAdapter(studentsViewAdapter);
 
         prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
@@ -125,6 +131,10 @@ public class HomeActivity extends AppCompatActivity {
         Button stop = findViewById(R.id.stop_btn);
         stop.setVisibility(View.VISIBLE);
 
+        // Create active session
+        activeSession = new Session();
+        db.sessionDao().insert(activeSession);
+
         MessageListener realListener = new MessageListener() {
             //put information into database
             @Override
@@ -138,20 +148,22 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
                     return;
                 }
+                foundStudent.setSession(activeSession);
                 db.studentWithCoursesDao().insert(foundStudent.student);
                 for(String courseTitle : foundStudent.courses) {
                     db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                 }
                 studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
-                        prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+                        prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
                 Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
-                        prioritySpinner.getSelectedItemPosition()));
+                        prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
             }
         };
 
         // Build a fake student
         StudentWithCourses fakedMessageStudent = new StudentWithCourses();
         fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
+        fakedMessageStudent.student.sessionID = 0;
         fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
                 .courseTitle);
 
@@ -189,7 +201,7 @@ public class HomeActivity extends AppCompatActivity {
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
-                    prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+                    prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
