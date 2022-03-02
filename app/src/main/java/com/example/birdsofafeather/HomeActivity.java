@@ -134,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
                 // Make sure we received a valid message.
                 try {
                     foundStudent = new StudentWithCourses(db.studentWithCoursesDao().count() + 1, message.getContent());
+
                 } catch (IllegalArgumentException e) {
                     Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
                     return;
