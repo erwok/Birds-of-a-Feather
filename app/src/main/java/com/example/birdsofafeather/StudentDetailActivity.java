@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,5 +55,21 @@ public class StudentDetailActivity extends AppCompatActivity {
 
     public void onCloseButtonClicked(View view) {
         finish();
+    }
+
+    public void onWaveToStudentClicked(View view) {
+        ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
+        emptyWaveHand.setVisibility(View.GONE);
+
+        ImageButton filledWaveHand = (ImageButton) findViewById(R.id.filled_hand_wave_id2);
+        filledWaveHand.setVisibility(View.VISIBLE);
+    }
+
+    public void onUnwaveClicked(View view) {
+        ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
+        emptyWaveHand.setVisibility(View.VISIBLE);
+
+        ImageButton filledWaveHand = (ImageButton) findViewById(R.id.filled_hand_wave_id2);
+        filledWaveHand.setVisibility(View.GONE);
     }
 }
