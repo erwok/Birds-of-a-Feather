@@ -1,6 +1,8 @@
 package com.example.birdsofafeather;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +45,24 @@ public class SessionViewAdapter extends RecyclerView.Adapter<SessionViewAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView sessionTextView;
+        private Session session;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.sessionTextView = itemView.findViewById(R.id.session_name_textview);
+            itemView.setOnClickListener(this::viewSession);
         }
 
         public void setSession(Session session) {
             this.sessionTextView.setText(session.sessionName);
+            this.session = session;
+        }
+
+        public void viewSession(View view) {
+            Context context = view.getContext();
+            Intent intent = new Intent(context, HomeActivity.class);
+            intent.putExtra(HomeActivity.HOME_SESSION_ID_EXTRA, session.sessionID);
+            context.startActivity(intent);
         }
     }
 }

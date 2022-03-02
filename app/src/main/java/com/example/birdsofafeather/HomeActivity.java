@@ -31,6 +31,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
     public static final int USER_ID = 0;
+    public static final String HOME_SESSION_ID_EXTRA = "HOME_SESSION_ID";
 
     private Message publishedMessage;
     protected RecyclerView matchedStudentsView;
@@ -79,7 +80,13 @@ public class HomeActivity extends AppCompatActivity {
 
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
-        activeSession = db.sessionDao().getLast();
+        Intent intent = getIntent();
+        int sessionID = intent.getIntExtra(HOME_SESSION_ID_EXTRA, -1);
+        if (sessionID == -1) {
+            activeSession = db.sessionDao().getLast();
+        } else {
+            activeSession = db.sessionDao().get(sessionID);
+        }
         if (activeSession == null) {
             activeSession = new Session();
         }
