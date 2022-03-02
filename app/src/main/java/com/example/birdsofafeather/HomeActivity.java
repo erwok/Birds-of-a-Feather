@@ -212,6 +212,12 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onSessionsClicked(View view) {
+        Log.d(TAG, "Sessions button clicked!");
+        Intent intent = new Intent(this, SessionsPageActivity.class);
+        startActivity(intent);
+    }
+
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
