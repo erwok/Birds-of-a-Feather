@@ -7,6 +7,8 @@
     android:onClick="onCloseButtonClicked"
     tools:context=".StudentDetailActivity">
 
+
+
     <ImageView
         android:id="@+id/student_profile_imageview"
         android:layout_width="0dp"
@@ -54,6 +56,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/empty_hand_wave_id2"
+        android:layout_width="53dp"
+        android:layout_height="47dp"
+        android:layout_margin="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="64dp"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
+        android:src="@drawable/emptyhand2"
+        android:visibility="visible"
+        android:onClick="onWaveToStudentClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toEndOf="@+id/student_name_textview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.63" />
+
+    <ImageButton
+        android:id="@+id/filled_hand_wave_id2"
+        android:layout_width="53dp"
+        android:layout_height="47dp"
+        android:layout_margin="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="64dp"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
+        android:src="@drawable/filledhand2"
+        android:visibility="gone"
+        android:onClick="onUnwaveClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.407"
+        app:layout_constraintStart_toEndOf="@+id/student_name_textview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.63" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/matched_courses_recyclerview"
