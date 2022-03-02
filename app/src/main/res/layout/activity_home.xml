@@ -142,6 +142,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="292dp"
         android:layout_marginBottom="20dp"
+        android:onClick="onSaveSessionClicked"
         android:text="save session"
         app:layout_constraintBottom_toTopOf="@+id/sessions_button"
         app:layout_constraintEnd_toEndOf="parent"

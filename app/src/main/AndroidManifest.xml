@@ -18,7 +18,7 @@
             android:name=".click_session"
             android:exported="false" />
         <activity
-            android:name=".sessions_page"
+            android:name=".SessionsPageActivity"
             android:exported="false" />
         <activity
             android:name=".NameSessionActivity"
