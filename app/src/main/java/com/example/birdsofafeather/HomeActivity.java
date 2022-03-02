@@ -198,6 +198,13 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onSaveSessionClicked(View view) {
+        Log.d(TAG, "Save session button was clicked!");
+        Intent intent = new Intent(this, NameSessionActivity.class);
+        intent.putExtra(NameSessionActivity.SESSION_ID_EXTRA, activeSession.sessionID);
+        startActivity(intent);
+    }
+
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             studentsViewAdapter.addStudent(studentSorter.getSortedStudents(

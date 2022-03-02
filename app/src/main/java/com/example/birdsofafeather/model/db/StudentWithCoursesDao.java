@@ -15,6 +15,7 @@ public interface StudentWithCoursesDao {
      * @return The StudentWithCourses representing this app's user.
      */
     @Query("SELECT * FROM students WHERE is_user LIMIT 1")
+    @Transaction
     StudentWithCourses getUser();
 
     /**
@@ -45,6 +46,7 @@ public interface StudentWithCoursesDao {
     List<StudentWithCourses> getFavoritedStudents();
 
     @Query("SELECT * FROM students WHERE id=:id")
+    @Transaction
     StudentWithCourses get(int id);
 
     @Query("SELECT COUNT(*) FROM students")

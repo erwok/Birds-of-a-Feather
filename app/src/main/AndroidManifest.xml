@@ -21,7 +21,7 @@
             android:name=".sessions_page"
             android:exported="false" />
         <activity
-            android:name=".activity_switch_sessions"
+            android:name=".NameSessionActivity"
             android:exported="false" />
         <activity
             android:name=".FavoritesActivity"
