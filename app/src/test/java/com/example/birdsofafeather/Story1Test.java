@@ -27,6 +27,7 @@ import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentSorter;
 
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class Story1Test {
@@ -60,8 +61,8 @@ public class Story1Test {
             // There should be 0 courses in the database before any are added
             assertEquals(0, db.coursesDao().count());
 
-            Student student1 = new Student(1, "Jeff", "google.jpg");
-            Student student2 = new Student(2, "Eric", "gmail.jpg");
+            Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
+            Student student2 = new Student(2, "Eric", "gmail.jpg", UUID.randomUUID().toString());
 
             db.studentWithCoursesDao().insert(student1);
             db.studentWithCoursesDao().insert(student2);
@@ -113,7 +114,7 @@ public class Story1Test {
         scenario.onActivity(activity -> {
             //db = AppDatabase.singleton(activity.getApplicationContext());
 
-            Student student1 = new Student(1, "Jeff", "google.jpg");
+            Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
             db.studentWithCoursesDao().insert(student1);
 
             Course jeffCourse = new Course(1, 2022, "WI", "CSE", "110");
@@ -126,7 +127,7 @@ public class Story1Test {
             stopButton.callOnClick();
 
             // Should expect Jeff to have 0 matched courses, since the user has 0 courses
-            assertEquals(-1, db.studentWithCoursesDao().get(1).getCommonCourseCount());
+            assertEquals(0, db.studentWithCoursesDao().get(1).getCommonCourseCount());
         });
     }
 }
