@@ -51,7 +51,7 @@ public class Course {
         this.subject = subject;
         this.courseNum = courseNum;
         this.courseSize = courseSize;
-        this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum;
+        this.courseTitle = "" + year + " " + quarter + " " + subject + " " + courseNum + " " + courseSize;
     }
 
     /**
@@ -61,13 +61,13 @@ public class Course {
      */
     @Ignore // So room doesn't get confused and try to use this constructor
     public Course(String courseTitle, int studentId) {
+        this.courseTitle = courseTitle;
         String[] splitTitle = this.courseTitle.split(" ");
         this.studentId = studentId;
         this.year = Integer.parseInt(splitTitle[0]);
         this.quarter = splitTitle[1];
         this.subject = splitTitle[2];
         this.courseNum = splitTitle[3];
-        this.courseTitle = "" + this.year + " " + this.quarter + " " + this.subject + " " + this.courseNum;
         this.courseSize = Integer.parseInt(splitTitle[4]);
     }
 }

@@ -12,6 +12,8 @@ import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
 
+import java.util.UUID;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,12 +37,12 @@ public class MS2Story3Test {
 
     @Test
     public void testRecyclerViewLength() {
-        Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "");
+        Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "", UUID.randomUUID().toString());
         defaultUser.isUser = true;
         db.studentWithCoursesDao().insert(defaultUser);
 
-        Student student1 = new Student(1, "Jeff", "google.jpg");
-        Student student2 = new Student(2, "Eric", "gmail.jpg");
+        Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
+        Student student2 = new Student(2, "Eric", "gmail.jpg", UUID.randomUUID().toString());
 
         db.studentWithCoursesDao().insert(student1);
         db.studentWithCoursesDao().insert(student2);
@@ -57,8 +59,8 @@ public class MS2Story3Test {
 
     @Test
     public void testFavoriteStudent() {
-        Student student1 = new Student(1, "Jeff", "google.jpg");
-        Student student2 = new Student(2, "Eric", "gmail.jpg");
+        Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
+        Student student2 = new Student(2, "Eric", "gmail.jpg", UUID.randomUUID().toString());
 
         db.studentWithCoursesDao().insert(student1);
         db.studentWithCoursesDao().insert(student2);

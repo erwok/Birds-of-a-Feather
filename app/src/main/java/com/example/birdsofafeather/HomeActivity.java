@@ -26,6 +26,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.List;
+import java.util.UUID;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
@@ -42,7 +43,6 @@ public class HomeActivity extends AppCompatActivity {
     public StudentSorter studentSorter;
 
     protected StudentWithCourses user;
-    private boolean first = true;
 
     @SuppressLint("WrongThread")
     @Override
@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
         user = db.studentWithCoursesDao().getUser();
 
         if (user == null) {
-            Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "");
+            Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "", UUID.randomUUID().toString());
             defaultUser.isUser = true;
             db.studentWithCoursesDao().insert(defaultUser);
             user = db.studentWithCoursesDao().getUser();
@@ -87,6 +87,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Log.d(TAG, "User name: " + user.getName());
         Log.d(TAG, "User URL: " + user.getPhotoURL());
+        Log.d(TAG, "User UUID: " + user.getUUID());
         for (String course : user.courses) {
             Log.d(TAG, "User course: " + course);
         }
@@ -151,10 +152,10 @@ public class HomeActivity extends AppCompatActivity {
         };
 
         // Build a fake student
-        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
-        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
-        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
-                .courseTitle);
+//        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
+//        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png", UUID.randomUUID().toString());
+//        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
+//                .courseTitle);
 
         //eventually not faked
         this.messageListener = new FakedMessageListener(realListener, 10, this);

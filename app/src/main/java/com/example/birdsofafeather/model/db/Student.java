@@ -18,6 +18,9 @@ public class Student {
     @ColumnInfo(name = "photo_URL")
     public String photoURL;
 
+    @ColumnInfo(name = "UUID")
+    public String UUID;
+
     /**
      * How many courses this student has in common with the user.
      */
@@ -42,9 +45,10 @@ public class Student {
     @ColumnInfo(name = "favorite", defaultValue = "FALSE")
     public boolean favorite = false;
 
-    public Student(int studentId, String name, String photoURL) {
+    public Student(int studentId, String name, String photoURL, String UUID) {
         this.studentId = studentId;
         this.name = name;
         this.photoURL = photoURL;
+        this.UUID = UUID;
     }
 }

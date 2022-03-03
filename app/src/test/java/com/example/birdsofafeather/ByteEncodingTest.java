@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.UUID;
 
 public class ByteEncodingTest {
 
@@ -19,7 +20,7 @@ public class ByteEncodingTest {
         Course course2 = new Course(1, 2021, "Fall", "COMM", "10");
         Course course3 = new Course(2, 2021, "Fall", "MATH", "20A");
 
-        Student student = new Student(0, "Rye Gleason", "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png");
+        Student student = new Student(0, "Rye Gleason", "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png", UUID.randomUUID().toString());
 
         StudentWithCourses studentWithCourses = new StudentWithCourses();
         studentWithCourses.student = student;

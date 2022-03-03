@@ -1,6 +1,7 @@
 package com.example.birdsofafeather;
 
 import android.content.Context;
+import android.print.PrinterInfo;
 
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.UUID;
 
 public class FakedMessageListener extends MessageListener{
     private final MessageListener messageListener;
@@ -28,32 +30,18 @@ public class FakedMessageListener extends MessageListener{
 
             StudentWithCourses fakedMessageStudent = new StudentWithCourses();
 
-            try {
-                InputStream is = context.getAssets().open("mock.csv");
-                Scanner in = new Scanner(is);
-                in.useDelimiter(",,,");
-                String name = in.next().trim();
-                System.out.println(name);
-                String photoURL = in.next().trim();
-                System.out.println(photoURL);
-                String course = in.next().trim();
-                String[] course_parts = course.split(",");
-
-                System.out.println(course);
-                fakedMessageStudent.student = new Student(0, name, photoURL);
-                fakedMessageStudent.courses.add(new Course(0, Integer.parseInt(
-                        course_parts[0]), course_parts[1], course_parts[2], course_parts[3],
-                        Integer.parseInt(course_parts[4])).courseTitle);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                stopExecutor();
-            }
+            fakedMessageStudent.student = new Student(0, "Bill",
+                    "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3" +
+                            "PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbA" +
+                            "RsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854" +
+                            "-h924-no?authuser=02022", UUID.randomUUID().toString());
+            fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 5)
+                    .courseTitle);
 
             byte[] messageBytes = fakedMessageStudent.toByteArray();
             Message message = new Message(messageBytes);
             this.messageListener.onFound(message);
-            this.messageListener.onLost(message);
+            //this.messageListener.onLost(message);
 
         }, 0, frequency, TimeUnit.SECONDS);
     }

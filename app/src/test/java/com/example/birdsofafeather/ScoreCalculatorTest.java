@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class ScoreCalculatorTest {
@@ -39,7 +40,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testNoCommonCourses() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
 
@@ -50,7 +51,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(userCourse1);
         db.coursesDao().insert(userCourse2);
 
-        Student other = new Student(1, "Other Student", "");
+        Student other = new Student(1, "Other Student", "", UUID.randomUUID().toString());
         db.studentWithCoursesDao().insert(other);
 
         Course otherCourse1 = new Course(1, 2021, "WI", "CSE",
@@ -71,7 +72,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateSharedCourseCount() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -81,7 +82,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc1);
         db.coursesDao().insert(uc2);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         db.studentWithCoursesDao().insert(s1);
         Course s1c1 = new Course(1, 2022, "WI", "CSE",
                 "110", 3);
@@ -101,7 +102,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateThisQuarterScore() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -114,7 +115,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc2);
         db.coursesDao().insert(uc3);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 3);
@@ -134,7 +135,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateSizeScore() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -156,7 +157,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc5);
         db.coursesDao().insert(uc6);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 0);
@@ -188,7 +189,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateRecencyScore(){
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -210,7 +211,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc5);
         db.coursesDao().insert(uc6);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
                 "110", 0);

@@ -16,6 +16,7 @@ import com.example.birdsofafeather.model.db.StudentWithCourses;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class NearbyMessagesMockActivity extends AppCompatActivity {
     private static final String TAG = "Mock_Nearby_Messages";
@@ -47,8 +48,9 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
         String mockStudentName = mockStudentInfo.get(0).replaceAll(",", "");
         String mockStudentGooglePhotoUrl = mockStudentInfo.get(1).replaceAll(",", "");
         int mockStudentId = AppDatabase.singleton(this).studentWithCoursesDao().count() + 1;
+        String mockUUID = UUID.randomUUID().toString();
 
-        Student mockStudent = new Student(mockStudentId, mockStudentName, mockStudentGooglePhotoUrl);
+        Student mockStudent = new Student(mockStudentId, mockStudentName, mockStudentGooglePhotoUrl, mockUUID);
         AppDatabase.singleton(this).studentWithCoursesDao().insert(mockStudent);
 
         for (int i = 2; i < mockStudentInfo.size(); i++) {
