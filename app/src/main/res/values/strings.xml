@@ -39,4 +39,5 @@
         <item>Huge (250-400)</item>
         <item>Gigantic (400+)</item>
     </string-array>
+    <string name="wave_checkbox_label">Wave At User</string>
 </resources>

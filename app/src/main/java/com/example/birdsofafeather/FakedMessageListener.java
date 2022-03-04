@@ -28,7 +28,7 @@ public class FakedMessageListener extends MessageListener{
 
     // counter to simulate classmate waving/removing a wave
     private static int counter = 0;
-    private final int WAVE_FREQUENCY = 2;
+    private final int WAVE_FREQUENCY = 3;
 
     public FakedMessageListener(MessageListener realMessageListener, int frequency, Context context) {
         this.messageListener = realMessageListener;

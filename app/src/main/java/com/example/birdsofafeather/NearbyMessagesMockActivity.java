@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
@@ -24,8 +25,6 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
     private static final String[] QUARTERS = new String[] {
             "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
-
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +71,22 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
                 // We've added a new shared course, so invalidate all previous shared course counts.
                 AppDatabase.singleton(this).studentWithCoursesDao().resetSharedCourses();
 
-                // TEST OUT THE WAVING
-                //mockStudent.waveToMe = true;
-                //AppDatabase.singleton(this).studentWithCoursesDao().updateStudent(mockStudent);
-
             } catch (Exception ex) {
                 CourseUtilities.showError(this, "Something was incorrectly formatted!"
                         + "\n" + ex);
             }
         }
 
+        CheckBox waveFromCB = findViewById(R.id.wave_at_user_checkbox);
+        if(waveFromCB.isChecked()) {
+            StudentWithCourses student = AppDatabase.singleton(this).studentWithCoursesDao().getWithUUID(mockUUID);
+            student.student.waveToMe = true;
+            AppDatabase.singleton(this).studentWithCoursesDao().updateStudent(student.student);
+        }
+
         // Reset the mock student info
         mockStudentInfoText.setText("");
+        waveFromCB.setChecked(false);
 
         CourseUtilities.showAlert(this, "Mock Student added!");
     }
