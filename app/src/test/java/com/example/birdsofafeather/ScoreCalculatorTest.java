@@ -237,4 +237,32 @@ public class ScoreCalculatorTest {
 
         assertEquals(5 + 5 + 4 + 3 + 2 + 1, sorter.calculateRecencyScore(stud1));
     }
+
+    @Test
+    public void testRetrieveWavedStudentsProperly(){
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
+        user.isUser = true;
+        db.studentWithCoursesDao().insert(user);
+
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
+        Student s2 = new Student(2, "Student 2", "", UUID.randomUUID().toString());
+        Student s3 = new Student(3, "Student 3", "", UUID.randomUUID().toString());
+        Student s4 = new Student(4, "Student 4", "", UUID.randomUUID().toString());
+        Student s5 = new Student(5, "Student 5", "", UUID.randomUUID().toString());
+        db.studentWithCoursesDao().insert(s1);
+        db.studentWithCoursesDao().insert(s2);
+        db.studentWithCoursesDao().insert(s3);
+        db.studentWithCoursesDao().insert(s4);
+        db.studentWithCoursesDao().insert(s5);
+
+        s1.waveToMe = true;
+        s2.waveToMe = true;
+        s4.waveToMe = true;
+        db.studentWithCoursesDao().updateStudent(s1);
+        db.studentWithCoursesDao().updateStudent(s2);
+        db.studentWithCoursesDao().updateStudent(s4);
+
+        assertEquals(3, db.studentWithCoursesDao().getStudentsWhoWaved(true).size());
+        assertEquals(2, db.studentWithCoursesDao().getStudentsWhoWaved(false).size());
+    }
 }

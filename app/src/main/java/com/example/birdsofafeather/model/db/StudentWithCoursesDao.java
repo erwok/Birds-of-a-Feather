@@ -53,7 +53,7 @@ public interface StudentWithCoursesDao {
     @Query("SELECT COUNT(*) FROM students")
     int count();
 
-    @Query("SELECT * FROM students WHERE wave_to_me=:wavedToMe")
+    @Query("SELECT * FROM students WHERE wave_to_me=:wavedToMe AND NOT is_user")
     List<StudentWithCourses> getStudentsWhoWaved(boolean wavedToMe);
 
     @Insert
