@@ -148,6 +148,9 @@ public class HomeActivity extends AppCompatActivity {
                     try {
                         Wave wave = new Wave(message.getContent());
                         StudentWithCourses student = db.studentWithCoursesDao().getWithUUID(wave.uuid);
+                        if(student == null) {
+                            return;
+                        }
                         student.student.waveToMe = wave.waveAt;
                         db.studentWithCoursesDao().updateStudent(student.student);
                     } catch (IllegalArgumentException ex) {
@@ -169,7 +172,7 @@ public class HomeActivity extends AppCompatActivity {
 //                .courseTitle);
 
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 3, this);
+        this.messageListener = new FakedMessageListener(realListener, 10, this);
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(publishedMessage);
     }

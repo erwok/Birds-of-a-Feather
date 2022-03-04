@@ -37,31 +37,28 @@ public class FakedMessageListener extends MessageListener{
         executor.scheduleAtFixedRate(() -> {
             counter++;
             StudentWithCourses fakedMessageStudent = new StudentWithCourses();
-            String uuid = "";
-            Message message;
+
+            Log.d(TAG, "Attempting to send student!");
+            String uuid = UUID.randomUUID().toString();
+            fakedMessageStudent.student = new Student(0, "Bill",
+                    "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3" +
+                            "PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbA" +
+                            "RsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854" +
+                            "-h924-no?authuser=02022", uuid);
+            fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 5)
+                    .courseTitle);
+
+            byte[] messageBytes = fakedMessageStudent.toByteArray();
+            Message message = new Message(messageBytes);
+            this.messageListener.onFound(message);
 
             if(counter % WAVE_FREQUENCY == 0) {
                 Log.d(TAG, "Attempting to wave!");
                 Wave fakeWave = new Wave(uuid, true);
                 byte[] waveBytes = fakeWave.toByteArray();
-                message = new Message(waveBytes);
-            } else {
-                Log.d(TAG, "Attempting to send student!");
-                uuid = UUID.randomUUID().toString();
-                fakedMessageStudent.student = new Student(0, "Bill",
-                        "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3" +
-                                "PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbA" +
-                                "RsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854" +
-                                "-h924-no?authuser=02022", uuid);
-                fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 5)
-                        .courseTitle);
-
-                byte[] messageBytes = fakedMessageStudent.toByteArray();
-                message = new Message(messageBytes);
+                Message waveMessage = new Message(waveBytes);
+                this.messageListener.onFound(waveMessage);
             }
-
-            this.messageListener.onFound(message);
-            //this.messageListener.onLost(message);
 
         }, 0, frequency, TimeUnit.SECONDS);
     }
