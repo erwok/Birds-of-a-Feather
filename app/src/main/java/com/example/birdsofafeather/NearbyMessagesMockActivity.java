@@ -72,6 +72,10 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
                 // We've added a new shared course, so invalidate all previous shared course counts.
                 AppDatabase.singleton(this).studentWithCoursesDao().resetSharedCourses();
 
+                // TEST OUT THE WAVING
+                //mockStudent.waveToMe = true;
+                //AppDatabase.singleton(this).studentWithCoursesDao().updateStudent(mockStudent);
+
             } catch (Exception ex) {
                 CourseUtilities.showError(this, "Something was incorrectly formatted!"
                         + "\n" + ex);

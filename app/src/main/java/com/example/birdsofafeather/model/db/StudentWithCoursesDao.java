@@ -47,6 +47,9 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE id=:id")
     StudentWithCourses get(int id);
 
+    @Query("SELECT * FROM students WHERE UUID=:UUID")
+    StudentWithCourses getWithUUID(String UUID);
+
     @Query("SELECT COUNT(*) FROM students")
     int count();
 
