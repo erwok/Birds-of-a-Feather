@@ -139,8 +139,8 @@ public class HomeActivity extends AppCompatActivity {
         stop.setVisibility(View.VISIBLE);
 
         // Create active session
-        activeSession = new Session();
-        db.sessionDao().insert(activeSession);
+        db.sessionDao().insert(new Session());
+        activeSession = db.sessionDao().getLast();
 
         MessageListener realListener = new MessageListener() {
             //put information into database
