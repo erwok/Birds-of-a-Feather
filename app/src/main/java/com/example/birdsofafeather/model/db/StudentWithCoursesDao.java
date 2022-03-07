@@ -47,8 +47,14 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE id=:id")
     StudentWithCourses get(int id);
 
+    @Query("SELECT * FROM students WHERE UUID=:UUID")
+    StudentWithCourses getWithUUID(String UUID);
+
     @Query("SELECT COUNT(*) FROM students")
     int count();
+
+    @Query("SELECT * FROM students WHERE wave_to_me=:wavedToMe AND NOT is_user")
+    List<StudentWithCourses> getStudentsWhoWaved(boolean wavedToMe);
 
     @Insert
     void insert(Student student);

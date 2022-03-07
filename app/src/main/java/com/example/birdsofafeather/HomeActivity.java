@@ -21,6 +21,7 @@ import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentSorter;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.Wave;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -131,23 +132,36 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found message!");
-                StudentWithCourses foundStudent;
                 // Make sure we received a valid message.
                 try {
-                    foundStudent = new StudentWithCourses(db.studentWithCoursesDao().count() + 1, message.getContent());
+                    StudentWithCourses foundStudent = new StudentWithCourses(
+                            db.studentWithCoursesDao().count() + 1, message.getContent());
+                    db.studentWithCoursesDao().insert(foundStudent.student);
+                    for(String courseTitle : foundStudent.courses) {
+                        db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
+                    }
 
+                    Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
+                            prioritySpinner.getSelectedItemPosition()));
                 } catch (IllegalArgumentException e) {
-                    Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
+                    Log.e(TAG, "Message received not a student: " + e.getLocalizedMessage());
+                    try {
+                        Wave wave = new Wave(message.getContent());
+                        StudentWithCourses student = db.studentWithCoursesDao().getWithUUID(wave.uuid);
+                        if(student == null) {
+                            return;
+                        }
+                        student.student.waveToMe = wave.waveAt;
+                        db.studentWithCoursesDao().updateStudent(student.student);
+                    } catch (IllegalArgumentException ex) {
+                        Log.e(TAG, "Message received not a wave: " + ex.getLocalizedMessage());
+                        return;
+                    }
                     return;
                 }
-                db.studentWithCoursesDao().insert(foundStudent.student);
-                for(String courseTitle : foundStudent.courses) {
-                    db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
-                }
+
                 studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
                         prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
-                Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
-                        prioritySpinner.getSelectedItemPosition()));
             }
         };
 
