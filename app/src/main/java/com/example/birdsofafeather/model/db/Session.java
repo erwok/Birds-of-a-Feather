@@ -26,4 +26,14 @@ public class Session {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yy H:mm");
         this.sessionName = dtf.format(LocalDateTime.now());
     }
+
+    public Session(String sessionName)
+    {
+       this.sessionName = sessionName;
+    }
+
+    public String getSessionName() {
+        return this.sessionName;
+    }
+
 }
