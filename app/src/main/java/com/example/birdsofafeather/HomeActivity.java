@@ -107,7 +107,6 @@ public class HomeActivity extends AppCompatActivity {
             Log.d(TAG, "User course: " + course);
         }
 
-        // May not be sorted yet, we do that later
         this.publishedMessage = new Message(user.toByteArray());
 
         prioritySpinner = findViewById(R.id.priority_spinner);

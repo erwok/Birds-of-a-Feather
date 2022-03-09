@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StudentSorter {
-    private final static int COMM_COURSE = 0;
-    private final static int THIS_Q = 1;
-    private final static int CLASS_SIZE = 2;
-    private final static int RECENCY = 3;
-    private final static int WAVE_FROM = 4;
+    public final static int COMM_COURSE = 0;
+    public final static int THIS_Q = 1;
+    public final static int CLASS_SIZE = 2;
+    public final static int RECENCY = 3;
+    public final static int WAVE_FROM = 4;
 
     private final int[] classSizeWeight = new int[] {100, 33, 18, 10, 6, 3};
     private final List<String> quarters = new ArrayList<>(Arrays.asList("FA", null, "SP", "WI"));
@@ -70,6 +70,7 @@ public class StudentSorter {
             case THIS_Q:
                 for(StudentWithCourses swc : students) {
                     swc.student.thisQuarterScore = calculateThisQuarterScore(swc);
+                    db.studentWithCoursesDao().updateStudent(swc.student);
                 }
                 return db.studentWithCoursesDao().getSortedOtherStudentsByThisQuarter(sessionID);
             case CLASS_SIZE:
