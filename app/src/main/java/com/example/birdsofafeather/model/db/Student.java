@@ -45,6 +45,9 @@ public class Student {
     @ColumnInfo(name = "favorite", defaultValue = "FALSE")
     public boolean favorite = false;
 
+    @ColumnInfo(name="session", defaultValue = "-1")
+    public int sessionID = -1;
+
     public Student(int studentId, String name, String photoURL, String UUID) {
         this.studentId = studentId;
         this.name = name;

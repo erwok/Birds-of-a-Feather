@@ -42,6 +42,10 @@ public class StudentWithCourses {
 
     public List<String> getClasses() { return this.courses; }
 
+    public void setSession(Session activeSession) {
+        this.student.sessionID = activeSession.sessionID;
+    }
+
 
     public StudentWithCourses() {
         courses = new ArrayList<>();

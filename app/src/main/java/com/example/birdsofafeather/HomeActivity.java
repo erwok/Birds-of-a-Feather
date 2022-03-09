@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentSorter;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
@@ -32,6 +33,7 @@ import java.util.UUID;
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
     public static final int USER_ID = 0;
+    public static final String HOME_SESSION_ID_EXTRA = "HOME_SESSION_ID";
 
     private Message publishedMessage;
     protected RecyclerView matchedStudentsView;
@@ -44,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
     public StudentSorter studentSorter;
 
     protected StudentWithCourses user;
+
+    protected Session activeSession;
 
     @SuppressLint("WrongThread")
     @Override
@@ -78,6 +82,16 @@ public class HomeActivity extends AppCompatActivity {
 
         // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
+        Intent intent = getIntent();
+        int sessionID = intent.getIntExtra(HOME_SESSION_ID_EXTRA, -1);
+        if (sessionID == -1) {
+            activeSession = db.sessionDao().getLast();
+        } else {
+            activeSession = db.sessionDao().get(sessionID);
+        }
+        if (activeSession == null) {
+            activeSession = new Session();
+        }
 
         if (user == null) {
             Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "", UUID.randomUUID().toString());
@@ -93,7 +107,6 @@ public class HomeActivity extends AppCompatActivity {
             Log.d(TAG, "User course: " + course);
         }
 
-        // May not be sorted yet, we do that later
         this.publishedMessage = new Message(user.toByteArray());
 
         prioritySpinner = findViewById(R.id.priority_spinner);
@@ -106,7 +119,7 @@ public class HomeActivity extends AppCompatActivity {
         matchedStudentsView.setLayoutManager(studentsLayoutManager);
 
         studentsViewAdapter = new StudentsViewAdapter(studentSorter.getSortedStudents(
-                prioritySpinner.getSelectedItemPosition()));
+                prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
         matchedStudentsView.setAdapter(studentsViewAdapter);
 
         prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
@@ -127,6 +140,10 @@ public class HomeActivity extends AppCompatActivity {
         Button stop = findViewById(R.id.stop_btn);
         stop.setVisibility(View.VISIBLE);
 
+        // Create active session
+        db.sessionDao().insert(new Session());
+        activeSession = db.sessionDao().getLast();
+
         MessageListener realListener = new MessageListener() {
             //put information into database
             @Override
@@ -136,13 +153,16 @@ public class HomeActivity extends AppCompatActivity {
                 try {
                     StudentWithCourses foundStudent = new StudentWithCourses(
                             db.studentWithCoursesDao().count() + 1, message.getContent());
+                    foundStudent.student.sessionID = activeSession.sessionID;
+
                     db.studentWithCoursesDao().insert(foundStudent.student);
+
                     for(String courseTitle : foundStudent.courses) {
                         db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                     }
 
                     Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
-                            prioritySpinner.getSelectedItemPosition()));
+                            prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
                 } catch (IllegalArgumentException e) {
                     Log.e(TAG, "Message received not a student: " + e.getLocalizedMessage());
                     try {
@@ -159,15 +179,15 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     return;
                 }
-
                 studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
-                        prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+                        prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
             }
         };
 
         // Build a fake student
 //        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
 //        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png", UUID.randomUUID().toString());
+//        fakedMessageStudent.student.sessionID = 0;
 //        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
 //                .courseTitle);
 
@@ -202,10 +222,23 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onSaveSessionClicked(View view) {
+        Log.d(TAG, "Save session button was clicked!");
+        Intent intent = new Intent(this, NameSessionActivity.class);
+        intent.putExtra(NameSessionActivity.SESSION_ID_EXTRA, activeSession.sessionID);
+        startActivity(intent);
+    }
+
+    public void onSessionsClicked(View view) {
+        Log.d(TAG, "Sessions button clicked!");
+        Intent intent = new Intent(this, SessionsPageActivity.class);
+        startActivity(intent);
+    }
+
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
-                    prioritySpinner.getSelectedItemPosition()), HomeActivity.this);
+                    prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
         }
 
         public void onNothingSelected(AdapterView<?> parent) {

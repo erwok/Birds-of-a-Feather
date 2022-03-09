@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.junit.After;
@@ -111,21 +112,23 @@ public class Story1Test {
 
     @Test
     public void testStartAndStopCorrectDatabaseItems() {
+        Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
+        student1.sessionID = 1;
+        db.studentWithCoursesDao().insert(student1);
+
+        Course jeffCourse = new Course(1, 2022, "WI", "CSE", "110");
+        db.coursesDao().insert(jeffCourse);
+
         scenario.onActivity(activity -> {
-            //db = AppDatabase.singleton(activity.getApplicationContext());
-
-            Student student1 = new Student(1, "Jeff", "google.jpg", UUID.randomUUID().toString());
-            db.studentWithCoursesDao().insert(student1);
-
-            Course jeffCourse = new Course(1, 2022, "WI", "CSE", "110");
-            db.coursesDao().insert(jeffCourse);
-
             Button startButton = activity.findViewById(R.id.start_btn);
             startButton.callOnClick();
 
             Button stopButton = activity.findViewById(R.id.stop_btn);
             stopButton.callOnClick();
 
+            activity.studentSorter.getSortedStudents(StudentSorter.COMM_COURSE, 1);
+
+            assertEquals(1, db.sessionDao().getLast().sessionID);
             // Should expect Jeff to have 0 matched courses, since the user has 0 courses
             assertEquals(0, db.studentWithCoursesDao().get(1).getCommonCourseCount());
         });

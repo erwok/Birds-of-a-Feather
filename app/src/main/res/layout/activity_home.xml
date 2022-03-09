@@ -10,38 +10,43 @@
         android:id="@+id/mock_nearby_messages_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="320dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="91dp"
         android:onClick="onMockNearbyMessagesClicked"
         android:text="Nearby Mock"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintEnd_toStartOf="@+id/sessions_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/add_courses_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="686dp"
+        android:layout_marginBottom="32dp"
         android:onClick="onAddCoursesClicked"
         android:text="Add Courses"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/view_favorites_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.779"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/matched_students_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/matched_students_view"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="190dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="180dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/matched_bof_label"
@@ -85,11 +90,13 @@
         android:id="@+id/view_favorites_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:onClick="onViewFavoritesClicked"
         android:text="@string/view_favorites"
-        app:layout_constraintBottom_toTopOf="@+id/add_courses_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/mock_nearby_messages_btn"
+        app:layout_constraintEnd_toStartOf="@+id/save_session_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -115,4 +122,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/prioritize_label"
         app:layout_constraintTop_toBottomOf="@+id/matched_bof_label" />
+
+    <Button
+        android:id="@+id/sessions_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="320dp"
+        android:layout_marginBottom="91dp"
+        android:onClick="onSessionsClicked"
+        android:text="sessions"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mock_nearby_messages_btn" />
+
+    <Button
+        android:id="@+id/save_session_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="292dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="onSaveSessionClicked"
+        android:text="save session"
+        app:layout_constraintBottom_toTopOf="@+id/sessions_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_favorites_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

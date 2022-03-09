@@ -15,6 +15,7 @@ public interface StudentWithCoursesDao {
      * @return The StudentWithCourses representing this app's user.
      */
     @Query("SELECT * FROM students WHERE is_user LIMIT 1")
+    @Transaction
     StudentWithCourses getUser();
 
     /**
@@ -22,20 +23,20 @@ public interface StudentWithCoursesDao {
      * in descending order.
      */
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY common_courses DESC")
-    List<StudentWithCourses> getSortedOtherStudents();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY common_courses DESC")
+    List<StudentWithCourses> getSortedOtherStudents(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY this_quarter_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByThisQuarter();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY this_quarter_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByThisQuarter(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY size_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByCourseSize();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY size_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByCourseSize(int sessionID);
 
     @Transaction
-    @Query("SELECT * FROM students WHERE NOT is_user ORDER BY recency_score DESC")
-    List<StudentWithCourses> getSortedOtherStudentsByRecency();
+    @Query("SELECT * FROM students WHERE session=:sessionID AND NOT is_user ORDER BY recency_score DESC")
+    List<StudentWithCourses> getSortedOtherStudentsByRecency(int sessionID);
 
     /**
      * @return A list of all non-user students, that have been favorited
@@ -45,6 +46,7 @@ public interface StudentWithCoursesDao {
     List<StudentWithCourses> getFavoritedStudents();
 
     @Query("SELECT * FROM students WHERE id=:id")
+    @Transaction
     StudentWithCourses get(int id);
 
     @Query("SELECT * FROM students WHERE UUID=:UUID")
@@ -53,8 +55,8 @@ public interface StudentWithCoursesDao {
     @Query("SELECT COUNT(*) FROM students")
     int count();
 
-    @Query("SELECT * FROM students WHERE wave_to_me=:wavedToMe AND NOT is_user")
-    List<StudentWithCourses> getStudentsWhoWaved(boolean wavedToMe);
+    @Query("SELECT * FROM students WHERE session=:sessionID AND wave_to_me=:wavedToMe AND NOT is_user")
+    List<StudentWithCourses> getStudentsWhoWaved(boolean wavedToMe, int sessionID);
 
     @Insert
     void insert(Student student);
