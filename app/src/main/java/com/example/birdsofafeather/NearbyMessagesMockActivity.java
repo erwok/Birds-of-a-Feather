@@ -50,7 +50,7 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
         String mockUUID = UUID.randomUUID().toString();
 
         Student mockStudent = new Student(mockStudentId, mockStudentName, mockStudentGooglePhotoUrl, mockUUID);
-        mockStudent.sessionID = AppDatabase.singleton(this).sessionDao().getLast().sessionID;;
+        mockStudent.sessionID = AppDatabase.singleton(this).sessionDao().getLast().sessionID;
 
         AppDatabase.singleton(this).studentWithCoursesDao().insert(mockStudent);
 

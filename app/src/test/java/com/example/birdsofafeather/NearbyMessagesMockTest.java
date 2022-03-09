@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Session;
 
 @RunWith(AndroidJUnit4.class)
 public class NearbyMessagesMockTest {
@@ -50,6 +51,7 @@ public class NearbyMessagesMockTest {
                     "\n2021,FA,CSE,210,0\n2022,WI,CSE,110,0\n2022,SP,CSE,110,0");
 
             Button enterMockStudentInfo = activity.findViewById(R.id.add_mock_student);
+            db.sessionDao().insert(new Session());
             enterMockStudentInfo.callOnClick();
 
             // There should be 1 student after adding Bill
