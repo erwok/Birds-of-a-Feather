@@ -7,22 +7,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.Wave;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDetailActivity extends AppCompatActivity {
+    private AppDatabase db;
+    private Message publishedMessage;
+    private final String WAVE_SENT = "Wave sent!";
+    private final String WAVE_REMOVED = "Wave removed!";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_detail);
+        db = AppDatabase.singleton(getApplicationContext());
 
         Intent intent = getIntent();
         int studentId = intent.getIntExtra(StudentsViewAdapter.STUDENT_ID_EXTRA, 0);
@@ -53,5 +64,31 @@ public class StudentDetailActivity extends AppCompatActivity {
 
     public void onCloseButtonClicked(View view) {
         finish();
+    }
+
+    public void onWaveToStudentClicked(View view) {
+        ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
+        emptyWaveHand.setVisibility(View.GONE);
+
+        ImageButton filledWaveHand = (ImageButton) findViewById(R.id.filled_hand_wave_id2);
+        filledWaveHand.setVisibility(View.VISIBLE);
+
+        Toast.makeText(this, WAVE_SENT, Toast.LENGTH_SHORT).show();
+
+        Wave waveAt = new Wave(db.studentWithCoursesDao().getUser().getUUID(), true);
+        publishedMessage = new Message(waveAt.toByteArray());
+        Nearby.getMessagesClient(this).publish(publishedMessage);
+    }
+
+    public void onUnwaveClicked(View view) {
+        ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
+        emptyWaveHand.setVisibility(View.VISIBLE);
+
+        ImageButton filledWaveHand = (ImageButton) findViewById(R.id.filled_hand_wave_id2);
+        filledWaveHand.setVisibility(View.GONE);
+
+        Wave waveAt = new Wave(db.studentWithCoursesDao().getUser().getUUID(), false);
+        publishedMessage = new Message(waveAt.toByteArray());
+        Toast.makeText(this, WAVE_REMOVED, Toast.LENGTH_SHORT).show();
     }
 }

@@ -109,7 +109,6 @@ public class NameActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
-
         // Name sign-in
         if (AppDatabase.singleton(getApplicationContext()).studentWithCoursesDao().getUser() == null) {
             oneTapClient.beginSignIn(signUpRequest)

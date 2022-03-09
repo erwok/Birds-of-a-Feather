@@ -9,7 +9,7 @@ public class StudentSorter {
     private final static int THIS_Q = 1;
     private final static int CLASS_SIZE = 2;
     private final static int RECENCY = 3;
-    private final static int WAVED_AT = 4;
+    private final static int WAVE_FROM = 4;
 
     private final int[] classSizeWeight = new int[] {100, 33, 18, 10, 6, 3};
     private final List<String> quarters = new ArrayList<>(Arrays.asList("FA", null, "SP", "WI"));
@@ -84,6 +84,10 @@ public class StudentSorter {
                     db.studentWithCoursesDao().updateStudent(swc.student);
                 }
                 return db.studentWithCoursesDao().getSortedOtherStudentsByRecency(sessionID);
+            case WAVE_FROM:
+                List<StudentWithCourses> retList = db.studentWithCoursesDao().getStudentsWhoWaved(true, sessionID);
+                retList.addAll(db.studentWithCoursesDao().getStudentsWhoWaved(false, sessionID));
+                return retList;
             default:
                 for(StudentWithCourses swc : students) {
                     swc.student.commonCourses = calculateSharedCourseCount(swc);

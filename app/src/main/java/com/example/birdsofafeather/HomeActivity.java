@@ -22,11 +22,13 @@ import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentSorter;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.Wave;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.List;
+import java.util.UUID;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
@@ -44,8 +46,8 @@ public class HomeActivity extends AppCompatActivity {
     public StudentSorter studentSorter;
 
     protected StudentWithCourses user;
+
     protected Session activeSession;
-    private boolean first = true;
 
     @SuppressLint("WrongThread")
     @Override
@@ -92,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         if (user == null) {
-            Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "");
+            Student defaultUser = new Student(db.studentWithCoursesDao().count(), "Default User", "", UUID.randomUUID().toString());
             defaultUser.isUser = true;
             db.studentWithCoursesDao().insert(defaultUser);
             user = db.studentWithCoursesDao().getUser();
@@ -100,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Log.d(TAG, "User name: " + user.getName());
         Log.d(TAG, "User URL: " + user.getPhotoURL());
+        Log.d(TAG, "User UUID: " + user.getUUID());
         for (String course : user.courses) {
             Log.d(TAG, "User course: " + course);
         }
@@ -147,32 +150,47 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found message!");
-                StudentWithCourses foundStudent;
                 // Make sure we received a valid message.
                 try {
-                    foundStudent = new StudentWithCourses(db.studentWithCoursesDao().count() + 1, message.getContent());
+                    StudentWithCourses foundStudent = new StudentWithCourses(
+                            db.studentWithCoursesDao().count() + 1, message.getContent());
+                    foundStudent.student.sessionID = activeSession.sessionID;
+
+                    db.studentWithCoursesDao().insert(foundStudent.student);
+
+                    for(String courseTitle : foundStudent.courses) {
+                        db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
+                    }
+
+                    Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
+                            prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
                 } catch (IllegalArgumentException e) {
-                    Log.e(TAG, "Received invalid message: " + e.getLocalizedMessage());
+                    Log.e(TAG, "Message received not a student: " + e.getLocalizedMessage());
+                    try {
+                        Wave wave = new Wave(message.getContent());
+                        StudentWithCourses student = db.studentWithCoursesDao().getWithUUID(wave.uuid);
+                        if(student == null) {
+                            return;
+                        }
+                        student.student.waveToMe = wave.waveAt;
+                        db.studentWithCoursesDao().updateStudent(student.student);
+                    } catch (IllegalArgumentException ex) {
+                        Log.e(TAG, "Message received not a wave: " + ex.getLocalizedMessage());
+                        return;
+                    }
                     return;
-                }
-                foundStudent.setSession(activeSession);
-                db.studentWithCoursesDao().insert(foundStudent.student);
-                for(String courseTitle : foundStudent.courses) {
-                    db.coursesDao().insert(new Course(courseTitle, foundStudent.getId()));
                 }
                 studentsViewAdapter.addStudent(studentSorter.getSortedStudents(
                         prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
-                Log.d(TAG, "New otherStudents size: " + studentSorter.getSortedStudents(
-                        prioritySpinner.getSelectedItemPosition(), activeSession.sessionID));
             }
         };
 
         // Build a fake student
-        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
-        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png");
-        fakedMessageStudent.student.sessionID = 0;
-        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
-                .courseTitle);
+//        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
+//        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png", UUID.randomUUID().toString());
+//        fakedMessageStudent.student.sessionID = 0;
+//        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
+//                .courseTitle);
 
         //eventually not faked
         this.messageListener = new FakedMessageListener(realListener, 10, this);

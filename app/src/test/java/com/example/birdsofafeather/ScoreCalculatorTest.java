@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class ScoreCalculatorTest {
@@ -39,7 +40,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testNoCommonCourses() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
 
@@ -50,7 +51,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(userCourse1);
         db.coursesDao().insert(userCourse2);
 
-        Student other = new Student(1, "Other Student", "");
+        Student other = new Student(1, "Other Student", "", UUID.randomUUID().toString());
         other.sessionID = 0;
         db.studentWithCoursesDao().insert(other);
 
@@ -72,7 +73,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateSharedCourseCount() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -82,7 +83,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc1);
         db.coursesDao().insert(uc2);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course s1c1 = new Course(1, 2022, "WI", "CSE",
@@ -103,7 +104,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateThisQuarterScore() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -116,7 +117,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc2);
         db.coursesDao().insert(uc3);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
@@ -137,7 +138,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateSizeScore() {
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -159,7 +160,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc5);
         db.coursesDao().insert(uc6);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
@@ -192,7 +193,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testCalculateRecencyScore(){
-        Student user = new Student(0, "Default User", "");
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
         user.isUser = true;
         db.studentWithCoursesDao().insert(user);
         Course uc1 = new Course(0, 2022, "WI", "CSE",
@@ -214,7 +215,7 @@ public class ScoreCalculatorTest {
         db.coursesDao().insert(uc5);
         db.coursesDao().insert(uc6);
 
-        Student s1 = new Student(1, "Student 1", "");
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
         s1.sessionID = 0;
         db.studentWithCoursesDao().insert(s1);
         Course sc1 = new Course(1, 2022, "WI", "CSE",
@@ -240,5 +241,39 @@ public class ScoreCalculatorTest {
         StudentWithCourses stud1 = students.get(0);
 
         assertEquals(5 + 5 + 4 + 3 + 2 + 1, sorter.calculateRecencyScore(stud1));
+    }
+
+    @Test
+    public void testRetrieveWavedStudentsProperly(){
+        Student user = new Student(0, "Default User", "", UUID.randomUUID().toString());
+        user.isUser = true;
+        db.studentWithCoursesDao().insert(user);
+
+        Student s1 = new Student(1, "Student 1", "", UUID.randomUUID().toString());
+        Student s2 = new Student(2, "Student 2", "", UUID.randomUUID().toString());
+        Student s3 = new Student(3, "Student 3", "", UUID.randomUUID().toString());
+        Student s4 = new Student(4, "Student 4", "", UUID.randomUUID().toString());
+        Student s5 = new Student(5, "Student 5", "", UUID.randomUUID().toString());
+        s1.sessionID = 0;
+        s2.sessionID = 0;
+        s3.sessionID = 0;
+        s4.sessionID = 0;
+        s5.sessionID = 0;
+
+        db.studentWithCoursesDao().insert(s1);
+        db.studentWithCoursesDao().insert(s2);
+        db.studentWithCoursesDao().insert(s3);
+        db.studentWithCoursesDao().insert(s4);
+        db.studentWithCoursesDao().insert(s5);
+
+        s1.waveToMe = true;
+        s2.waveToMe = true;
+        s4.waveToMe = true;
+        db.studentWithCoursesDao().updateStudent(s1);
+        db.studentWithCoursesDao().updateStudent(s2);
+        db.studentWithCoursesDao().updateStudent(s4);
+
+        assertEquals(3, db.studentWithCoursesDao().getStudentsWhoWaved(true, 0).size());
+        assertEquals(2, db.studentWithCoursesDao().getStudentsWhoWaved(false, 0).size());
     }
 }

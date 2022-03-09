@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StudentWithCourses {
 
@@ -36,6 +37,8 @@ public class StudentWithCourses {
     }
 
     public boolean getFavorite() { return this.student.favorite; }
+
+    public String getUUID() { return this.student.UUID; }
 
     public List<String> getClasses() { return this.courses; }
 
@@ -75,7 +78,23 @@ public class StudentWithCourses {
         }
         String photoURL = new String(photoURLBytes, StandardCharsets.US_ASCII);
 
-        student = new Student(studentID, studentName, photoURL);
+        int UUIDLength = inputStream.read();
+        byte[] UUIDBytes = new byte[UUIDLength];
+
+        int numReadUUIDBytes = inputStream.read(UUIDBytes,0,UUIDLength);
+
+        if (inputStream.available() == 0) {
+            Log.e(TAG, "No more bytes to read");
+        }
+
+        if (numReadUUIDBytes /*inputStream.read(UUIDBytes, 0, UUIDLength)*/ < UUIDLength) {
+            Log.e(TAG, "Reading UUID, expected " + UUIDLength + "bytes and got " + numReadUUIDBytes);
+            throw new IllegalArgumentException("Invalid bytearray!");
+        }
+        String UUID = new String(UUIDBytes, StandardCharsets.US_ASCII);
+        System.out.println(UUID);
+
+        student = new Student(studentID, studentName, photoURL, UUID);
 
         while(inputStream.available() > 0) {
             int courseBytesLength = inputStream.read();
@@ -94,6 +113,8 @@ public class StudentWithCourses {
      * nameLength bytes for student.name, encoded in ASCII
      * 2 bytes for photoBytesLength (MSB first)
      * photoBytesLength bytes for student.photoURL, encoded in ASCII
+     * 1 byte for UUIDLength
+     * UUIDLength bytes for the UUID
      *
      * and then any number of courses, where a course is:
      * 1 byte for courseLength
@@ -102,6 +123,7 @@ public class StudentWithCourses {
     public byte[] toByteArray() {
         byte[] nameBytes = student.name.getBytes(StandardCharsets.US_ASCII);
         byte[] photoBytes = student.photoURL.getBytes(StandardCharsets.US_ASCII);
+        byte[] UUIDBytes = student.UUID.getBytes(StandardCharsets.US_ASCII);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(nameBytes.length);
@@ -112,6 +134,10 @@ public class StudentWithCourses {
         outputStream.write(photoBytes.length & 0xFF);
 
         outputStream.write(photoBytes, 0, photoBytes.length);
+
+        outputStream.write(UUIDBytes.length);
+        outputStream.write(UUIDBytes, 0, UUIDBytes.length);
+
         for (String course : this.courses) {
             byte[] course_bytes = course.getBytes(StandardCharsets.US_ASCII);
             outputStream.write(course_bytes.length);

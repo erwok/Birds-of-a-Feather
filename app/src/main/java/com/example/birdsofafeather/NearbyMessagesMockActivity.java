@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
@@ -16,6 +17,7 @@ import com.example.birdsofafeather.model.db.StudentWithCourses;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class NearbyMessagesMockActivity extends AppCompatActivity {
     private static final String TAG = "Mock_Nearby_Messages";
@@ -23,8 +25,6 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
     private static final String[] QUARTERS = new String[] {
             "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
-
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,9 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
         String mockStudentName = mockStudentInfo.get(0).replaceAll(",", "");
         String mockStudentGooglePhotoUrl = mockStudentInfo.get(1).replaceAll(",", "");
         int mockStudentId = AppDatabase.singleton(this).studentWithCoursesDao().count() + 1;
+        String mockUUID = UUID.randomUUID().toString();
 
-        Student mockStudent = new Student(mockStudentId, mockStudentName, mockStudentGooglePhotoUrl);
+        Student mockStudent = new Student(mockStudentId, mockStudentName, mockStudentGooglePhotoUrl, mockUUID);
         mockStudent.sessionID = 0;
         AppDatabase.singleton(this).studentWithCoursesDao().insert(mockStudent);
 
@@ -77,8 +78,16 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
             }
         }
 
+        CheckBox waveFromCB = findViewById(R.id.wave_at_user_checkbox);
+        if(waveFromCB.isChecked()) {
+            StudentWithCourses student = AppDatabase.singleton(this).studentWithCoursesDao().getWithUUID(mockUUID);
+            student.student.waveToMe = true;
+            AppDatabase.singleton(this).studentWithCoursesDao().updateStudent(student.student);
+        }
+
         // Reset the mock student info
         mockStudentInfoText.setText("");
+        waveFromCB.setChecked(false);
 
         CourseUtilities.showAlert(this, "Mock Student added!");
     }

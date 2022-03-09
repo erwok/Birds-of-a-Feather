@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,6 +74,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         private final ImageView studentPfpView;
         private final TextView matchedCoursesView;
         private final CheckBox favoriteCheckbox;
+        private final ImageButton handWaveButton;
 
         private StudentWithCourses student;
 
@@ -89,6 +91,7 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
                             .studentWithCoursesDao().favoriteStudent(student.getId(), isChecked);
                 }
             });
+            this.handWaveButton = itemView.findViewById(R.id.filled_hand_wave_id);
 
             itemView.setOnClickListener(this);
         }
@@ -103,6 +106,11 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
                     .fitCenter()
                     .into(studentPfpView);
             this.favoriteCheckbox.setChecked(student.getFavorite());
+            if(student.student.waveToMe) {
+                this.handWaveButton.setVisibility(View.VISIBLE);
+            } else {
+                this.handWaveButton.setVisibility(View.GONE);
+            }
         }
 
         @Override

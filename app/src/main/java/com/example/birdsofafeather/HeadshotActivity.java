@@ -14,6 +14,7 @@ import android.view.View;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import java.util.UUID;
 
 public class HeadshotActivity extends AppCompatActivity {
 
@@ -33,7 +34,7 @@ public class HeadshotActivity extends AppCompatActivity {
 
         if (urlBox.getText().toString().endsWith(".png") || urlBox.getText().toString().endsWith(".jpg")) {
             // This is where we actually create the user entry
-            Student user = new Student(HomeActivity.USER_ID, userName, urlBox.getText().toString());
+            Student user = new Student(HomeActivity.USER_ID, userName, urlBox.getText().toString(), UUID.randomUUID().toString());
             user.isUser = true;
 
             // Wipe any previous data
