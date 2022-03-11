@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -124,6 +125,9 @@ public class HomeActivity extends AppCompatActivity {
 
         prioritySpinner.setOnItemSelectedListener(new SpinnerActivity());
         prioritySpinner.setSelection(0);
+
+        CheckBox mockedCheckBox = findViewById(R.id.mock_checkbox);
+        mockedCheckBox.setChecked(true);
     }
 
     public void onAddCoursesClicked(View view) {
@@ -192,7 +196,10 @@ public class HomeActivity extends AppCompatActivity {
 //                .courseTitle);
 
         //eventually not faked
-        this.messageListener = new FakedMessageListener(realListener, 10, this);
+        CheckBox mockedCheckBox = findViewById(R.id.mock_checkbox);
+        if(mockedCheckBox.isChecked()) {
+            this.messageListener = new FakedMessageListener(realListener, 10, this);
+        }
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(publishedMessage);
     }
