@@ -59,29 +59,6 @@ public class HomeActivity extends AppCompatActivity {
         db = AppDatabase.singleton(getApplicationContext());
         studentSorter = new StudentSorter(db);
 
-        //FOR TESTING STORY 8
-        //if (db.studentWithCoursesDao().count() < 2) {
-            //Student friend1 = new Student(1, "Elizabeth", "https://ichef.bbci.co.uk/news/976/cpsprodpb/67CF/production/_108857562_mediaitem108857561.jpg");
-//            Student friend2 = new Student(2, "Rye", "https://upload.wikimedia.org/wikipedia/commons/7/79/Ear_of_rye.jpg");
-//            Student friend3 = new Student(3, "Jeff", "");
-//            Student friend4 = new Student(4, "Helen", "https://skynursery.com/wp-content/uploads/2015/01/misc_Annas_Hummingbird_39089535924.jpg");
-//            Student friend5 = new Student(5, "Eric", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/204px-Android_robot.svg.png");
-
-            //db.studentWithCoursesDao().insert(friend1);
-//            db.studentWithCoursesDao().insert(friend2);
-//            db.studentWithCoursesDao().insert(friend3);
-//            db.studentWithCoursesDao().insert(friend4);
-//            db.studentWithCoursesDao().insert(friend5);
-
-            //db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "100"));
-            //db.coursesDao().insert(new Course(1, 2021, "FA", "CSE", "110"));
-
-//            db.coursesDao().insert(new Course(4, 2021, "FA", "CSE", "100"));
-//            db.coursesDao().insert(new Course(4, 2020, "SP", "CSE", "101"));
-//            db.coursesDao().insert(new Course(4, 2020, "SP", "PHIL", "27"));
-//        }
-
-        // END OF TESTING
         user = db.studentWithCoursesDao().getUser();
         Intent intent = getIntent();
         int sessionID = intent.getIntExtra(HOME_SESSION_ID_EXTRA, -1);
@@ -187,18 +164,19 @@ public class HomeActivity extends AppCompatActivity {
                         prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
             }
         };
-
-        // Build a fake student
+//        Build a fake student
 //        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
 //        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png", UUID.randomUUID().toString());
 //        fakedMessageStudent.student.sessionID = 0;
 //        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
 //                .courseTitle);
 
-        //eventually not faked
         CheckBox mockedCheckBox = findViewById(R.id.mock_checkbox);
         if(mockedCheckBox.isChecked()) {
-            this.messageListener = new FakedMessageListener(realListener, 10, this);
+            this.messageListener = new FakedMessageListener(realListener, 5, this);
+        }
+        else {
+            this.messageListener = realListener;
         }
         Nearby.getMessagesClient(this).subscribe(messageListener);
         Nearby.getMessagesClient(this).publish(publishedMessage);
@@ -212,7 +190,10 @@ public class HomeActivity extends AppCompatActivity {
         Button stop = findViewById(R.id.stop_btn);
         stop.setVisibility(View.GONE);
 
-        ((FakedMessageListener) messageListener).stopExecutor();
+        CheckBox mockedCheckBox = findViewById(R.id.mock_checkbox);
+        if(mockedCheckBox.isChecked()) {
+            ((FakedMessageListener) messageListener).stopExecutor();
+        }
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
         Nearby.getMessagesClient(this).unpublish(this.publishedMessage);
     }
