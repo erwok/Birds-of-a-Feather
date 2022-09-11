@@ -15,14 +15,30 @@ import com.example.birdsofafeather.model.db.Session;
 
 import java.util.List;
 
+/**
+ * Adapter used to create multiple session UI pages with each session's corresponding found
+ * students.
+ */
 public class SessionViewAdapter extends RecyclerView.Adapter<SessionViewAdapter.ViewHolder>{
     private final List<Session> sessions;
 
+    /**
+     * Constructor initializing sessions to be displayed.
+     *
+     * @param sessions
+     */
     public SessionViewAdapter(List<Session> sessions) {
         super();
         this.sessions = sessions;
     }
 
+    /**
+     * Generate individual session page.
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public SessionViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,11 +54,17 @@ public class SessionViewAdapter extends RecyclerView.Adapter<SessionViewAdapter.
         holder.setSession(sessions.get(position));
     }
 
+    /**
+     * @return number of found students in the session
+     */
     @Override
     public int getItemCount() {
         return this.sessions.size();
     }
 
+    /**
+     * Custom UI layout for a session.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView sessionTextView;
         private Session session;
@@ -53,11 +75,21 @@ public class SessionViewAdapter extends RecyclerView.Adapter<SessionViewAdapter.
             itemView.setOnClickListener(this::viewSession);
         }
 
+        /**
+         * Sets data to be displayed of a particular input session.
+         *
+         * @param session
+         */
         public void setSession(Session session) {
             this.sessionTextView.setText(session.sessionName);
             this.session = session;
         }
 
+        /**
+         * Opens the home page with the found students of the set session.
+         *
+         * @param view
+         */
         public void viewSession(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, HomeActivity.class);

@@ -22,6 +22,9 @@ import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.List;
 
+/**
+ * Adapter used to create repeated UI views of students found while searching.
+ */
 public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapter.ViewHolder> {
 
     public static final String STUDENT_ID_EXTRA = "student_id";
@@ -69,6 +72,9 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
         ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
     }
 
+    /**
+     * Custom ViewHolder for individual students with shared classes found while searching.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView studentNameView;
         private final ImageView studentPfpView;
@@ -96,6 +102,11 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * Sets various UI components of a found student.
+         *
+         * @param student
+         */
         public void setPerson(StudentWithCourses student) {
             Log.d(TAG, "Set person " + student.getName());
             this.student = student;
@@ -113,6 +124,10 @@ public class StudentsViewAdapter extends RecyclerView.Adapter<StudentsViewAdapte
             }
         }
 
+        /**
+         * onClick handler for displaying particular student's details pages.
+         * @param view
+         */
         @Override
         public void onClick(View view) {
             Context context = view.getContext();

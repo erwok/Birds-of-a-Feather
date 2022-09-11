@@ -11,9 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+
+/**
+ * Connects courses data to be displayed to a repeated layout template.
+ */
 public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.ViewHolder>{
     private final List<String> courses;
 
+    /**
+     * Constructor instantiating courses to be displayed.
+     *
+     * @param courses
+     */
     public CourseViewAdapter(List<String> courses) {
         super();
         this.courses = courses;
@@ -39,6 +48,9 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
         return this.courses.size();
     }
 
+    /**
+     * Custom View Holder class to display individual courses to the UI.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseTextView;
 

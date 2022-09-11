@@ -31,6 +31,10 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Home page with functionality for various button clicks, UI displaying
+ * user specific data, and setting up different session uses of the current user.
+ */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "BoaF_Home";
     public static final int USER_ID = 0;
@@ -50,6 +54,13 @@ public class HomeActivity extends AppCompatActivity {
 
     protected Session activeSession;
 
+    /**
+     * Acquire suer data from database and set up session data as well as
+     * setting up the many layout components of the page with the user specific
+     * data.
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,9 @@ public class HomeActivity extends AppCompatActivity {
 
         user = db.studentWithCoursesDao().getUser();
         Intent intent = getIntent();
+
+        // Sessions save previous searches of classmates and their data without
+        // user favoriting or saving anything
         int sessionID = intent.getIntExtra(HOME_SESSION_ID_EXTRA, -1);
         if (sessionID == -1) {
             activeSession = db.sessionDao().getLast();
@@ -87,6 +101,9 @@ public class HomeActivity extends AppCompatActivity {
 
         this.publishedMessage = new Message(user.toByteArray());
 
+        /**
+         * Following code sets up UI components on home page.
+         */
         prioritySpinner = findViewById(R.id.priority_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.priority_array, android.R.layout.simple_spinner_item);
@@ -107,12 +124,25 @@ public class HomeActivity extends AppCompatActivity {
         mockedCheckBox.setChecked(true);
     }
 
+    /**
+     * Add course button onClick listener.
+     *
+     * @param view
+     */
     public void onAddCoursesClicked(View view) {
         Log.d(TAG, "Add courses button was clicked!");
+        // Opens add course activity where users input required fields for a new course
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Start Bluetooth search of classmates with shared courses.
+     * Nearby Messages API used to acquire data sent from other users
+     * and to send the current user's data out for others to acquire.
+     *
+     * @param view
+     */
     public void onStartClicked(View view) {
         Log.d(TAG, "Start search button was clicked!");
         Button start = findViewById(R.id.start_btn);
@@ -164,12 +194,6 @@ public class HomeActivity extends AppCompatActivity {
                         prioritySpinner.getSelectedItemPosition(), activeSession.sessionID), HomeActivity.this);
             }
         };
-//        Build a fake student
-//        StudentWithCourses fakedMessageStudent = new StudentWithCourses();
-//        fakedMessageStudent.student = new Student(0, "Jacob", "https://cdn.wccftech.com/wp-content/uploads/2017/07/nearby_connections.png", UUID.randomUUID().toString());
-//        fakedMessageStudent.student.sessionID = 0;
-//        fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 0)
-//                .courseTitle);
 
         CheckBox mockedCheckBox = findViewById(R.id.mock_checkbox);
         if(mockedCheckBox.isChecked()) {
@@ -182,6 +206,11 @@ public class HomeActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).publish(publishedMessage);
     }
 
+    /**
+     * Halts a current search and stops user from sending and receiving data.
+     *
+     * @param view
+     */
     public void onStopClicked(View view) {
         Log.d(TAG, "Stop button was clicked!");
         Button start = findViewById(R.id.start_btn);
@@ -198,18 +227,35 @@ public class HomeActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).unpublish(this.publishedMessage);
     }
 
+    /**
+     * Mock nearby messages onClick listener.
+     *
+     * @param view
+     */
     public void onMockNearbyMessagesClicked(View view) {
         Log.d(TAG, "Mock button was clicked!");
         Intent intent = new Intent(this, NearbyMessagesMockActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * View favorites button onClick listener.
+     * Opens up favorites page.
+     *
+     * @param view
+     */
     public void onViewFavoritesClicked(View view) {
         Log.d(TAG, "View favorites button was clicked!");
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Save session button onClick listener.
+     * Saves a current search session with found users and their data.
+     *
+     * @param view
+     */
     public void onSaveSessionClicked(View view) {
         Log.d(TAG, "Save session button was clicked!");
         Intent intent = new Intent(this, NameSessionActivity.class);
@@ -217,12 +263,22 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * View sessions button onClick listener.
+     * Allows user to view old search sessions where they can view past matched students.
+     *
+     * @param view
+     */
     public void onSessionsClicked(View view) {
         Log.d(TAG, "Sessions button clicked!");
         Intent intent = new Intent(this, SessionsPageActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * UI activity designed to dynamically sort users upon new students being added to
+     * users found in current session.
+     */
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             studentsViewAdapter.addStudent(studentSorter.getSortedStudents(

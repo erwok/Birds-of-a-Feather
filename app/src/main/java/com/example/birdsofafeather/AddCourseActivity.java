@@ -16,12 +16,21 @@ import com.example.birdsofafeather.model.db.Course;
 
 import java.util.Arrays;
 
+/**
+ * Activity page handling student users adding courses they've taken
+ * to their profile.
+ */
 public class AddCourseActivity extends AppCompatActivity {
     protected Spinner classSizeSpinner;
     private static final String[] QUARTERS = new String[] {
             "FA", "WI", "SP", "SS1", "SS2", "SSS"
     };
 
+    /**
+     * UI set up upon page being accessed.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +49,31 @@ public class AddCourseActivity extends AppCompatActivity {
         classSizeSpinner.setSelection(5);
     }
 
+    /**
+     * Add button onClick listener.
+     *
+     * @param view
+     */
     public void onAddButtonClicked(View view) {
         addCourse();
     }
 
+    /**
+     * Done button onClick listener.
+     *
+     * @param view
+     */
     public void onDoneButtonClicked(View view) {
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
     }
 
+    /**
+     * Helper method validating user input course information and updating
+     * frontend displayed courses.
+     */
     private void addCourse() {
+        // Acquire course year, quarter, subject, and course number
         TextView yearTextView = findViewById(R.id.editYearTextView);
         TextView quarterTextView = findViewById(R.id.editQuarterTextView);
         TextView subjectTextView = findViewById(R.id.editSubjectTextView);
@@ -61,6 +85,7 @@ public class AddCourseActivity extends AppCompatActivity {
             String subject = subjectTextView.getText().toString();
             String courseNum = courseNumTextView.getText().toString();
 
+            // Validate course information
             if(!Arrays.asList(QUARTERS).contains(quarter)) {
                 throw new Exception();
             }
@@ -76,8 +101,9 @@ public class AddCourseActivity extends AppCompatActivity {
             Course newCourse = new Course(HomeActivity.USER_ID, year, quarter, subject, courseNum,
                     classSizeSpinner.getSelectedItemPosition());
 
+            // Insert valid course into database
             AppDatabase.singleton(this).coursesDao().insert(newCourse);
-            // We've added a new shared course, so invalidate all previous shared course counts.
+            // Previous shared course counts invalidated after shared course insertion
             AppDatabase.singleton(this).studentWithCoursesDao().resetSharedCourses();
 
             // Reset the course number

@@ -19,6 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Mock class to make sure entries to database and periodic additional found
+ * students are correctly displayed in the UI and saved to the database.
+ */
 public class NearbyMessagesMockActivity extends AppCompatActivity {
     private static final String TAG = "Mock_Nearby_Messages";
 
@@ -32,6 +36,12 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nearby_messsages_mock);
     }
 
+    /**
+     * Adds a mock student with necessary fields to the database and
+     * loads them in onto the found students UI component.
+     *
+     * @param view
+     */
     public void onAddMockStudentClicked(View view) {
         Log.d(TAG, "Add mock student button was clicked!");
 
@@ -93,6 +103,11 @@ public class NearbyMessagesMockActivity extends AppCompatActivity {
         CourseUtilities.showAlert(this, "Mock Student added!");
     }
 
+    /**
+     * Return to home activity button onClick listener.
+     *
+     * @param view
+     */
     public void onMockGoBackClicked(View view) {
         Log.d(TAG, "Mock go back to home screen button clicked");
         Intent homeIntent = new Intent(this, HomeActivity.class);

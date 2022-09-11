@@ -16,6 +16,9 @@ import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.List;
 
+/**
+ * Activity to display all available sessions to view.
+ */
 public class SessionsPageActivity extends AppCompatActivity {
 
     @Override
@@ -33,6 +36,11 @@ public class SessionsPageActivity extends AppCompatActivity {
         sessionRecyclerView.setAdapter(sessionViewAdapter);
     }
 
+    /**
+     * Back button onClick listener.
+     *
+     * @param view
+     */
     public void onBackButtonClicked(View view) {
         finish();
     }

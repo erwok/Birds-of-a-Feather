@@ -23,12 +23,21 @@ import com.google.android.gms.nearby.messages.Message;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to hold found student's matched courses andwave status.
+ */
 public class StudentDetailActivity extends AppCompatActivity {
     private AppDatabase db;
     private Message publishedMessage;
     private final String WAVE_SENT = "Wave sent!";
     private final String WAVE_REMOVED = "Wave removed!";
 
+    /**
+     * UI initialization of a page showing a found student and their matched
+     * courses with the current user.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +71,21 @@ public class StudentDetailActivity extends AppCompatActivity {
         courseRecyclerView.setAdapter(courseViewAdapter);
     }
 
+    /**
+     * Close button onClick listener.
+     *
+     * @param view
+     */
     public void onCloseButtonClicked(View view) {
         finish();
     }
 
+    /**
+     * Send wave button onClick listener.
+     * Sends wave to student who user clicks the hand wave button for.
+     *
+     * @param view
+     */
     public void onWaveToStudentClicked(View view) {
         ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
         emptyWaveHand.setVisibility(View.GONE);
@@ -80,6 +100,12 @@ public class StudentDetailActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).publish(publishedMessage);
     }
 
+    /**
+     * Unwave button onClick listener.
+     * Unsends wave to selected student.
+     *
+     * @param view
+     */
     public void onUnwaveClicked(View view) {
         ImageButton emptyWaveHand = (ImageButton) findViewById(R.id.empty_hand_wave_id2);
         emptyWaveHand.setVisibility(View.VISIBLE);

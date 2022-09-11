@@ -20,6 +20,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.UUID;
 
+
+/**
+ * Mock Message Listener class that simulates acquiring sent data from other users
+ * and responds accordingly, creating fake students to connect with, acquiring fake
+ * waves from students, and saving the fake data.
+ */
 public class FakedMessageListener extends MessageListener{
     private final MessageListener messageListener;
     private final ScheduledExecutorService executor;
@@ -30,10 +36,18 @@ public class FakedMessageListener extends MessageListener{
     private static int counter = 0;
     private final int WAVE_FREQUENCY = 3;
 
+    /**
+     * Constructor
+     *
+     * @param realMessageListener
+     * @param frequency
+     * @param context
+     */
     public FakedMessageListener(MessageListener realMessageListener, int frequency, Context context) {
         this.messageListener = realMessageListener;
         this.executor = Executors.newSingleThreadScheduledExecutor();
 
+        // Mock creation of new students who send their data periodically
         executor.scheduleAtFixedRate(() -> {
             counter++;
             StudentWithCourses fakedMessageStudent = new StudentWithCourses();
@@ -48,6 +62,7 @@ public class FakedMessageListener extends MessageListener{
             fakedMessageStudent.courses.add(new Course(0, 2021, "FA", "CSE", "110", 5)
                     .courseTitle);
 
+            // Convert fake student data into byte array that can be shared and parsed efficiently
             byte[] messageBytes = fakedMessageStudent.toByteArray();
             Message message = new Message(messageBytes);
             this.messageListener.onFound(message);
@@ -63,6 +78,9 @@ public class FakedMessageListener extends MessageListener{
         }, 0, frequency, TimeUnit.SECONDS);
     }
 
+    /**
+     * Stops operation of fake student data being sent.
+     */
     public void stopExecutor() {
         this.executor.shutdown();
     }

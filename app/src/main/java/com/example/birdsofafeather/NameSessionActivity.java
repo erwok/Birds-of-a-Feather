@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Session;
 
+/**
+ * Activity used to save user input names for different sessions.
+ */
 public class NameSessionActivity extends AppCompatActivity {
 
     public static final String SESSION_ID_EXTRA = "session_id";
@@ -51,6 +54,11 @@ public class NameSessionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Renames a session with user input text.
+     *
+     * @param view
+     */
     private void onEnterClicked(View view) {
         AppDatabase db = AppDatabase.singleton(this);
         db.sessionDao().renameSession(sessionID, sessionNameText.getText().toString());

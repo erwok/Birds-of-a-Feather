@@ -43,12 +43,6 @@ public class NameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
 
-        // For debugging
-//        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.remove(NAME_PREFERENCE_KEY);
-//        editor.commit();
-
         editTextName = findViewById(R.id.editTextName);
         confirmButton = findViewById(R.id.confirmButton);
         editTextName.addTextChangedListener(new TextWatcher() {
@@ -114,7 +108,7 @@ public class NameActivity extends AppCompatActivity {
             oneTapClient.beginSignIn(signUpRequest)
                     .addOnSuccessListener(this, result -> {
                         try {
-                            //noinspection deprecation
+                            // noinspection deprecation
                             startIntentSenderForResult(
                                     result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
                                     null, 0, 0, 0);

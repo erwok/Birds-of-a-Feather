@@ -16,10 +16,16 @@ import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 import java.util.UUID;
 
+/**
+ * App component for profile pictures users add to their profile.
+ */
 public class HeadshotActivity extends AppCompatActivity {
 
     private String userName;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +35,11 @@ public class HeadshotActivity extends AppCompatActivity {
         userName = intent.getStringExtra(NameActivity.NAME_EXTRA);
     }
 
+    /**
+     * Save image url to user's entry in the database
+     *
+     * @param view
+     */
     public void saveURL(View view) {
         TextView urlBox = findViewById(R.id.URLBox);
 

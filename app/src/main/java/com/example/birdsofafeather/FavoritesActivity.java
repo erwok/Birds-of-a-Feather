@@ -11,12 +11,20 @@ import android.view.View;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+/**
+ * Activity managing current user's favorite other users.
+ */
 public class FavoritesActivity extends AppCompatActivity {
     protected RecyclerView favoritesStudentView;
     protected RecyclerView.LayoutManager studentsLayoutManager;
     protected StudentsViewAdapter studentsViewAdapter;
     private AppDatabase db;
 
+    /**
+     * Favorite students are loaded onto page in the UI upon opening of this activity.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +40,11 @@ public class FavoritesActivity extends AppCompatActivity {
         favoritesStudentView.setAdapter(studentsViewAdapter);
     }
 
+    /**
+     * Return back to home page upon user clicking on back button.
+     *
+     * @param view
+     */
     public void onBackHomeClicked(View view) {
         Intent homeIntent = new Intent(this, HomeActivity.class);
         startActivity(homeIntent);
